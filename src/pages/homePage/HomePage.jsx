@@ -1,4 +1,5 @@
 import Banner from "../../components/banner/Banner";
+import Features from "../../components/features/Features";
 import RecentSolves from "../../components/recentSolves/RecentSolves";
 
 
@@ -7,6 +8,7 @@ const HomePage = () => {
         <div>
             <Banner></Banner>
             <RecentSolves></RecentSolves>
+            <Features></Features>
         </div>
     );
 };
