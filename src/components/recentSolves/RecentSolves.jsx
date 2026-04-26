@@ -7,7 +7,7 @@ const RecentSolves = () => {
     return (
         <div className="bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE]">
 
-            <div className='mt-5 flex items-center justify-between gap-3 h-[400px] bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5'>
+            <div className='mt-5 flex items-center justify-between gap-3 h-[400px] bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5 px-8'>
                 <div className='mx-auto w-[300px] h-[300px] mb-2 mt-2'>
                     <LottieComponent
                         animationData={maintenance}
