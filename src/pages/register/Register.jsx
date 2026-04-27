@@ -3,13 +3,21 @@ import signin from '../../assets/animation/signin.png'
 import { useForm } from 'react-hook-form';
 import { useRef } from 'react';
 import profileImg from '../../assets/image-upload-icon.png'
+import axios from 'axios';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const fileRef = useRef(null);
     const { ref, ...rest } = register("photo", { required: true });
 
-    const handleRegister = (data) => {
+    const handleRegister = async(data) => {
+        
+        const profileImage = data.photo[0];
+        const formData = new FormData();
+        formData.append("image", profileImage);
+        const imageUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+        const res = await axios.post(imageUrl, formData);
+        console.log("res: ", res);
         console.log(data);
     }
     return (
