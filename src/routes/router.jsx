@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import HomePage from "../pages/homePage/HomePage";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
 import RootLayout from "../Layouts/RootLayout";
+import SignIn from "../pages/signIn/SignIn";
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: HomePage
+      },
+      {
+        path:'/signin',
+        Component: SignIn
       }
     ]
   },
