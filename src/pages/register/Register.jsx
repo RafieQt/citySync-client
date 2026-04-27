@@ -1,9 +1,13 @@
 import { Link } from 'react-router';
 import signin from '../../assets/animation/signin.png'
 import { useForm } from 'react-hook-form';
+import { useRef } from 'react';
+import profileImg from '../../assets/image-upload-icon.png'
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const fileRef = useRef(null);
+    const { ref, ...rest } = register("photo", { required: true });
 
     const handleRegister = (data) => {
         console.log(data);
@@ -11,8 +15,25 @@ const Register = () => {
     return (
         <div className="flex gap-3 items-center justify-between bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5 px-20 mb-2 mt-10">
             <div>
+                <h2 className='text-[#03373D] font-bold text-4xl py-6'>Create an Account!</h2>
                 <form onSubmit={handleSubmit(handleRegister)}>
                     <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-[450px] border p-4">
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: "none" }}
+                            {...rest}
+                            ref={(e) => {
+                                ref(e);
+                                fileRef.current = e;
+                            }}
+                        />
+                        <label className='label'>Profile Picture</label>
+                        <label className="text-sm font-semibold">Profile Image</label>
+                        <div onClick={() => fileRef.current.click()} className='w-12 h-12 rounded-full hover:cursor-pointer'>
+                            <img src={profileImg} className='hover:cursor-pointer' alt="" />
+                        </div>
 
                         {/* Name */}
                         <label className="label">Name</label>
@@ -38,7 +59,7 @@ const Register = () => {
                             errors.password?.type === "minLength" && <p>Minimum Length is 6!</p>
                         }
 
-                        <button className="btn mt-4 w-full bg-[#03373D] text-white font-semibold">Login</button>
+                        <button className="btn mt-4 w-full bg-[#03373D] text-white font-semibold">Sign Up</button>
                         <p className='text-center'>Already a User? <Link to='/signin' className='text-[#03373D]  hover:underline font-bold'>Sign In</Link></p>
                     </fieldset>
                 </form>
