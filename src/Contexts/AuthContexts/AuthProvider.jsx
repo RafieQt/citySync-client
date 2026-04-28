@@ -1,15 +1,15 @@
 
 import { AuthContext } from './AuthContext';
-import {  createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../../firebase/firebase.init'
-const AuthProvider = ({children}) => {
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../firebase/firebase.init'
+const AuthProvider = ({ children }) => {
 
-    const registerUser = (email, password)=>{
-        return createUserWithEmailAndPassword(email, password, auth)
+    const registerUser = (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password)
     }
 
-    const signUser = (email, password)=>{
-        return signInWithEmailAndPassword( email, password)
+    const signUser = (email, password) => {
+        return signInWithEmailAndPassword(email, password)
     }
 
     const authInfo = {
@@ -18,9 +18,9 @@ const AuthProvider = ({children}) => {
     }
 
     return (
-        <AuthContext value={authInfo}>
+        <AuthContext.Provider value={authInfo}>
             {children}
-        </AuthContext>
+        </AuthContext.Provider>
     );
 };
 

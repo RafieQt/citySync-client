@@ -4,14 +4,16 @@ import { useForm } from 'react-hook-form';
 import { useRef } from 'react';
 import profileImg from '../../assets/image-upload-icon.png'
 import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
 
 const Register = () => {
+    const { registerUser } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const fileRef = useRef(null);
     const { ref, ...rest } = register("photo", { required: true });
 
-    const handleRegister = async(data) => {
-        
+    const handleRegister = async (data) => {
+
         const profileImage = data.photo[0];
         const formData = new FormData();
         formData.append("image", profileImage);
@@ -19,6 +21,11 @@ const Register = () => {
         const res = await axios.post(imageUrl, formData);
         console.log("res: ", res);
         console.log(data);
+
+        registerUser(data.email, data.password).then(res => console.log("regs ",res)).catch(error=>{
+            console.log(error);
+        })
+
     }
     return (
         <div className="flex gap-3 items-center justify-between bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5 px-20 mb-2 mt-10">
