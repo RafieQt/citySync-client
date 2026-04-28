@@ -3,13 +3,20 @@ import Lottie from "lottie-react";
 const LottieComponent = Lottie?.default || Lottie;
 import join from '../../assets/animation/join.json'
 import { useForm } from 'react-hook-form';
+import useAuth from '../../hooks/useAuth';
 
 const SignIn = () => {
+    const {signUser} = useAuth();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const handleLogin = (data) => {
+    const handleLogin = async(data) => {
         console.log(data);
+
+        signUser(data.email, data.password).then(res=> console.log("sign ", res)).catch(error=>{
+            console.log(error);
+        })
+
     }
 
     return (
