@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import Logo from "../ErrorPage/logo/Logo";
-
+import face from '../../assets/animation/face.png'
 
 const Navbar = () => {
     const { user, logout } = useAuth();
@@ -26,7 +26,7 @@ const Navbar = () => {
                                 <div className="w-10 rounded-full">
                                     <img
                                         alt="Tailwind CSS Navbar component"
-                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                        src={user ? user?.photoURL : face} />
                                 </div>
                             </div>
                             <ul

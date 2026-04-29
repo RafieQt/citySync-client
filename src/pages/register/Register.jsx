@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import profileImg from '../../assets/image-upload-icon.png'
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import { updateProfile } from "firebase/auth";
 import GoogleLogin from '../../components/googleLogin/GoogleLogin';
 
 const Register = () => {
@@ -18,12 +19,22 @@ const Register = () => {
         const profileImage = data.photo[0];
         const formData = new FormData();
         formData.append("image", profileImage);
-        const imageUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
-        const res = await axios.post(imageUrl, formData);
-        console.log("res: ", res);
+        const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+        const imgRes = await axios.post(imageAPIUrl, formData);
+        const imgURL = imgRes.data.data.url;
+        console.log("res: ", imgRes);
         console.log(data);
 
-        registerUser(data.email, data.password).then(res => console.log("regs ", res)).catch(error => {
+        registerUser(data.email, data.password)
+        .then(res => {
+            console.log("regs ", res);
+            const user = res.user;
+            updateProfile(user, {
+                photoURL: imgURL,
+                displayName: data.name
+            })
+        })
+        .catch(error => {
             console.log(error);
         })
 
