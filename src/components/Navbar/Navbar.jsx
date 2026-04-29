@@ -7,7 +7,11 @@ const Navbar = () => {
     const { user, logout } = useAuth();
 
     const handleLogout = () => {
-        logout();
+        logout()
+        .then()
+        .catch(error=>{
+            console.log(error);
+        })
     }
     return (
         <div className="max-w-7xl flex flex-col pt-5 mx-auto">

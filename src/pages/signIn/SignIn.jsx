@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import Lottie from "lottie-react";
 const LottieComponent = Lottie?.default || Lottie;
 import join from '../../assets/animation/join.json'
@@ -8,15 +8,23 @@ import GoogleLogin from '../../components/googleLogin/GoogleLogin';
 
 const SignIn = () => {
     const { signUser } = useAuth();
+    let navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const handleLogin = async (data) => {
         console.log(data);
 
-        signUser(data.email, data.password).then(res => console.log("sign ", res)).catch(error => {
-            console.log(error);
-        })
+        signUser(data.email, data.password)
+            .then(res =>
+            {
+                console.log(res);
+                navigate(location?.state || "/");
+            }
+            )
+            .catch(error => {
+                console.log(error);
+            })
 
     }
 
@@ -24,7 +32,7 @@ const SignIn = () => {
         <div className="flex gap-3 items-center justify-between bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5 px-20 mt-10">
             <div>
                 <h2 className='text-[#03373D] font-bold text-4xl py-6'>Sign In</h2>
-                <div  className="fieldset bg-base-200 border-base-300 rounded-box w-[450px] border p-4">
+                <div className="fieldset bg-base-200 border-base-300 rounded-box w-[450px] border p-4">
                     <form onSubmit={handleSubmit(handleLogin)}>
                         <fieldset>
 
@@ -50,7 +58,7 @@ const SignIn = () => {
                             <p className='text-center my-2'>New User? <Link to='/register' className='text-[#03373D]  hover:underline font-bold'>Sign Up</Link></p>
                         </fieldset>
                     </form>
-                <GoogleLogin></GoogleLogin>
+                    <GoogleLogin></GoogleLogin>
                 </div>
             </div>
             <div className='' style={{ width: 350 }}>
