@@ -4,6 +4,7 @@ import ErrorPage from "../components/ErrorPage/ErrorPage";
 import RootLayout from "../Layouts/RootLayout";
 import SignIn from "../pages/signIn/SignIn";
 import Register from "../pages/register/Register";
+import ProblemDetails from "../pages/problemDetails/ProblemDetails";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
         path:'/register',
         Component: Register
       },
+      {
+        path: '/problemDetails',
+        element: <ProblemDetails></ProblemDetails>
+      }
     ]
   },
 ]);
