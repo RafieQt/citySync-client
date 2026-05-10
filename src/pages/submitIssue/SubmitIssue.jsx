@@ -2,12 +2,21 @@ import { useForm } from "react-hook-form";
 import undrawForm from "../../assets/undraw.svg";
 import { MapPin, Upload, FileText, Tag } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 const SubmitIssue = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const {user} = useAuth();
-    console.log(user.displayName);
-    const handleSubmitIssue = (data) => {
+    const { user } = useAuth();
+
+    const handleSubmitIssue = async(data) => {
+        const issueImage = data.image[0];
+        const formData = new FormData();
+        formData.append("image", issueImage);
+        const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+        const imgRes = await axios.post(imageAPIUrl, formData);
+        const imgURL = imgRes.data.data.url;
+        console.log("res: ", imgRes);
+        console.log("image url: ", imgURL);
         console.log(data);
     }
 
@@ -63,7 +72,7 @@ const SubmitIssue = () => {
                                     Category
                                 </label>
                                 <select  {...register("category", { required: true })} className="p-2 select select-bordered w-full rounded-xl bg-gray-50 focus:bg-white">
-                                    <option disabled selected>
+                                    <option disabled>
                                         Select issue category
                                     </option>
                                     <option>Road Damage</option>
