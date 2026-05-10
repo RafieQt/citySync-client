@@ -11,7 +11,7 @@ const ProblemDetails = () => {
 
             <img className="rounded-md" src="https://media.istockphoto.com/id/174662203/photo/pot-hole.jpg?s=612x612&w=0&k=20&c=HhFYQD5qAJItGzYWJJQ72nxBR8iidL7Np2g82dfvnoM=" alt="" />
 
-            <h2 className="text-[#355E63] text-2xl font-semibold">Description:</h2>
+            <h2 className="text-[#355E63] text-3xl font-bold">Description:</h2>
             <p>There is a large pothole in the middle of the road near the school,
                 causing traffic congestion and accidents.</p>
 

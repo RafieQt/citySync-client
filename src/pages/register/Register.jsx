@@ -7,8 +7,10 @@ import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import { updateProfile } from "firebase/auth";
 import GoogleLogin from '../../components/googleLogin/GoogleLogin';
+import Swal from 'sweetalert2';
 
 const Register = () => {
+
     const { registerUser } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const fileRef = useRef(null);
@@ -26,17 +28,41 @@ const Register = () => {
         console.log(data);
 
         registerUser(data.email, data.password)
-        .then(res => {
-            console.log("regs ", res);
-            const user = res.user;
-            updateProfile(user, {
-                photoURL: imgURL,
-                displayName: data.name
+            .then(res => {
+                console.log("regs ", res);
+                const user = res.user;
+                return updateProfile(user, {
+                    photoURL: imgURL,
+                    displayName: data.name
+                });
+
+            }).then(() => {
+                return {
+                    email: data.email,
+                    displayName: data.name,
+                    photoURL: imgURL
+                };
+            }
+            ).then(userInfo => {
+               return axios.post(`http://localhost:3000/users`, userInfo)
+            }).then(res => {
+                if (res.data.insertedId) {
+                    console.log("user created!");
+                }
             })
-        })
-        .catch(error => {
-            console.log(error);
-        })
+            .catch(error => {
+                if (error.code == "auth/email-already-in-use") {
+                    Swal.fire({
+                        title: "The email is already used!",
+                        imageUrl: "https://img.icons8.com/?size=100&id=13826&format=png&color=000000",
+                        imageWidth: 100,
+                        imageHeight: 100,
+                        imageAlt: "Custom image"
+                    });
+                } else {
+                    console.log(error);
+                }
+            })
 
     }
     return (
@@ -57,7 +83,7 @@ const Register = () => {
                                 }}
                             />
                             <label className='label'>Profile Picture</label>
-                            
+
                             <div onClick={() => fileRef.current.click()} className='w-12 h-12 rounded-full hover:cursor-pointer'>
                                 <img src={profileImg} className='hover:cursor-pointer' alt="" />
                             </div>
