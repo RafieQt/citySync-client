@@ -5,6 +5,7 @@ import RootLayout from "../Layouts/RootLayout";
 import SignIn from "../pages/signIn/SignIn";
 import Register from "../pages/register/Register";
 import ProblemDetails from "../pages/problemDetails/ProblemDetails";
+import SubmitIssue from "../pages/submitIssue/SubmitIssue";
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +28,11 @@ export const router = createBrowserRouter([
       {
         path: '/problemDetails',
         element: <ProblemDetails></ProblemDetails>
-      }
+      },
+      {
+        path: '/submitIssue',
+        element: <SubmitIssue></SubmitIssue>
+      },
     ]
   },
 ]);

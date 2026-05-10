@@ -77,6 +77,7 @@ const Register = () => {
                                 accept="image/*"
                                 style={{ display: "none" }}
                                 {...rest}
+                               
                                 ref={(e) => {
                                     ref(e);
                                     fileRef.current = e;
@@ -87,6 +88,9 @@ const Register = () => {
                             <div onClick={() => fileRef.current.click()} className='w-12 h-12 rounded-full hover:cursor-pointer'>
                                 <img src={profileImg} className='hover:cursor-pointer' alt="" />
                             </div>
+                            {
+                                errors.photo?.type === "required" && <p>Profile Picture is Required!</p>
+                            }
 
                             {/* Name */}
                             <label className="label">Name</label>
