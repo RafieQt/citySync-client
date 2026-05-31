@@ -5,7 +5,7 @@ import axiosSecure from "../../../utils/axiosSecure";
 import toast from "react-hot-toast";
 import { Crown, CheckCircle } from "lucide-react";
 
-const PREMIUM_AMOUNT = 5; // Stripe test charge in USD ($5.00); UI shows ৳500
+const PREMIUM_AMOUNT = 500; // Stripe test charge in USD ($5.00); UI shows ৳500
 
 const Subscription = () => {
   const { user } = useAuth();
