@@ -1,13 +1,20 @@
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const GoogleLogin = () => {
     const { signInGoogle } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSignIn = ()=>{
+    const handleSignIn = () => {
         signInGoogle()
-        .then(res=> console.log(res))
-        .catch(error=>{
+        .then(() => {
+            toast.success("Signed in with Google!");
+            navigate("/");
+        })
+        .catch(error => {
             console.log(error);
+            toast.error(error.message || "Google sign-in failed.");
         })
     }
 

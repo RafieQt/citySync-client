@@ -1,31 +1,29 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 import Lottie from "lottie-react";
 const LottieComponent = Lottie?.default || Lottie;
 import join from '../../assets/animation/join.json'
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import GoogleLogin from '../../components/googleLogin/GoogleLogin';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
     const { signUser } = useAuth();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const handleLogin = async (data) => {
-        console.log(data);
-
         signUser(data.email, data.password)
-            .then(res =>
-            {
-                console.log(res);
+            .then(() => {
+                toast.success("Signed in successfully!");
                 navigate(location?.state || "/");
-            }
-            )
+            })
             .catch(error => {
                 console.log(error);
+                toast.error(error.message || "Sign in failed. Please try again.");
             })
-
     }
 
     return (
