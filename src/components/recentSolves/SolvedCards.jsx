@@ -1,67 +1,56 @@
-const SolvedCards = () => {
-  
+import { Link } from "react-router";
+import { MapPin, Tag, Calendar, ChevronUp } from "lucide-react";
+
+const SolvedCards = ({ issue }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300 overflow-hidden w-[280px]">
-
-      {/* Image */}
-      <img
-        src='https://images.squarespace-cdn.com/content/v1/573365789f726693272dc91a/1704992146415-CI272VYXPALWT52IGLUB/AdobeStock_201419293.jpeg?format=1500w'
-        alt=''
-        className="w-full h-48 object-cover"
-      />
-
-      {/* Content */}
-      <div className="p-4 space-y-3">
-
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-[#03373D]">
-          Title
-        </h3>
-
-        {/* Category */}
-        <p className="text-sm text-[#4A6B70]">
-          Categ
-        </p>
-
-        {/* Badges */}
-        <div className="flex gap-2 flex-wrap">
-
-          {/* Status Badge */}
-          <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700">
-            {status}
-          </span>
-
-          {/* Priority Badge */}
-          {/* <span
-            className={`text-xs px-3 py-1 rounded-full ${
-              priority === "High"
-                ? "bg-red-100 text-red-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {priority} Priority
-          </span> */}
-
+    <div className="card bg-white shadow-md rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+      <figure className="h-44 overflow-hidden rounded-t-2xl">
+        <img
+          src={issue.image}
+          alt={issue.title}
+          className="w-full h-full object-cover"
+        />
+      </figure>
+      <div className="card-body p-4">
+        {/* Status badge */}
+        <div className="flex gap-2">
+          <span className="badge badge-success badge-sm">✓ Resolved</span>
+          {issue.priority === "high" && (
+            <span className="badge badge-error badge-sm text-white">🔥 Boosted</span>
+          )}
         </div>
 
-        {/* Location */}
-        <p className="text-sm text-gray-500">
-          📍 Loc
-        </p>
+        <h2 className="card-title text-[#03373D] text-base font-bold leading-tight line-clamp-2 mt-1">
+          {issue.title}
+        </h2>
 
-        {/* Footer */}
-        <div className="flex justify-between items-center pt-2">
+        <p className="text-gray-500 text-xs line-clamp-2">{issue.description}</p>
 
-          {/* Upvote */}
-          <div className="flex items-center gap-2 cursor-pointer hover:text-[#03373D]">
-            👍 <span>up</span>
+        <div className="flex flex-col gap-1 mt-2">
+          <div className="flex items-center gap-1 text-gray-400 text-xs">
+            <Tag size={12} />
+            <span>{issue.category}</span>
           </div>
+          <div className="flex items-center gap-1 text-gray-400 text-xs">
+            <MapPin size={12} />
+            <span className="line-clamp-1">{issue.location}</span>
+          </div>
+          <div className="flex items-center gap-1 text-gray-400 text-xs">
+            <Calendar size={12} />
+            <span>{new Date(issue.updatedAt || issue.createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
 
-          {/* Button */}
-          <button className="bg-[#03373D] text-white text-sm px-4 py-2 rounded-md hover:bg-[#02282D] transition">
-            View Details
-          </button>
-
+        <div className="card-actions justify-between items-center mt-3">
+          <div className="flex items-center gap-1 text-[#03373D] font-semibold text-sm">
+            <ChevronUp size={15} />
+            <span>{issue.upvotes?.length || 0}</span>
+          </div>
+          <Link to={`/issues/${issue._id}`}>
+            <button className="btn btn-sm bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
+              View Details
+            </button>
+          </Link>
         </div>
       </div>
     </div>
