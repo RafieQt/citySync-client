@@ -87,7 +87,7 @@ const StaffDashboard = () => {
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`btn btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
+            className={`btn px-2 btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
           >
             {s}
           </button>
@@ -143,7 +143,7 @@ const StaffDashboard = () => {
                   </td>
                   <td>
                     <Link to={`/issues/${issue._id}`}>
-                      <button className="btn btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
+                      <button className="btn px-2 btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
                     </Link>
                   </td>
                 </tr>

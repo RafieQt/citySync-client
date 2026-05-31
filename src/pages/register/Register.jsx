@@ -143,7 +143,7 @@ const Register = () => {
                                 errors.password?.type === "minLength" && <p>Minimum Length is 6!</p>
                             }
 
-                            <button className="btn mt-4 w-full bg-[#03373D] text-white font-semibold">Sign Up</button>
+                            <button className="btn px-2 mt-4 w-full bg-[#03373D] text-white font-semibold">Sign Up</button>
                             <p className='text-center my-2'>Already a User? <Link to='/signin' className='text-[#03373D]  hover:underline font-bold'>Sign In</Link></p>
                         </fieldset>
                     </form>

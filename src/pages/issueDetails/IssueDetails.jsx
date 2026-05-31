@@ -80,7 +80,7 @@ const EditModal = ({ issue, onClose }) => {
             <button type="submit" disabled={uploading || editMutation.isPending} className="btn bg-[#03373D] text-white border-none flex-1 rounded-xl">
               {uploading || editMutation.isPending ? <span className="loading loading-spinner loading-sm" /> : "Save Changes"}
             </button>
-            <button type="button" onClick={onClose} className="btn btn-outline flex-1 rounded-xl">Cancel</button>
+            <button type="button" onClick={onClose} className="btn px-2 btn-outline flex-1 rounded-xl">Cancel</button>
           </div>
         </form>
       </div>
@@ -185,14 +185,14 @@ const IssueDetails = () => {
                 if (isOwner) return toast.error("Can't upvote your own issue");
                 upvoteMutation.mutate();
               }}
-              className={`btn rounded-xl gap-2 ${alreadyUpvoted ? "bg-[#03373D] text-white border-none" : "btn-outline border-[#03373D] text-[#03373D]"}`}
+              className={`btn px-2 rounded-xl gap-2 ${alreadyUpvoted ? "bg-[#03373D] text-white border-none" : "btn-outline border-[#03373D] text-[#03373D]"}`}
             >
               <ChevronUp size={18} /> {issue.upvotes?.length || 0} Upvotes
             </button>
 
             {/* Edit — owner + pending only */}
             {canEdit && (
-              <button onClick={() => setShowEdit(true)} className="btn btn-outline rounded-xl gap-2">
+              <button onClick={() => setShowEdit(true)} className="btn px-2 btn-outline rounded-xl gap-2">
                 <Pencil size={16} /> Edit
               </button>
             )}
@@ -205,7 +205,7 @@ const IssueDetails = () => {
                     deleteMutation.mutate();
                   }
                 }}
-                className="btn btn-error btn-outline rounded-xl gap-2"
+                className="btn px-2 btn-error btn-outline rounded-xl gap-2"
               >
                 <Trash2 size={16} /> Delete
               </button>
@@ -216,7 +216,7 @@ const IssueDetails = () => {
               <button
                 onClick={handleBoostCheckout}
                 disabled={boosting}
-                className="btn bg-amber-500 hover:bg-amber-600 text-white border-none rounded-xl gap-2"
+                className="btn px-2 bg-amber-500 hover:bg-amber-600 text-white border-none rounded-xl gap-2"
               >
                 {boosting ? <span className="loading loading-spinner loading-sm" /> : <><Zap size={16} /> Boost Priority (৳100)</>}
               </button>

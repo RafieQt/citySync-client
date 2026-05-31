@@ -168,7 +168,7 @@ const SidebarContent = ({
 
         <button
           onClick={handleLogout}
-          className="btn btn-sm btn-outline border-red-300 text-red-500 hover:bg-red-50 w-full rounded-xl gap-2"
+          className="btn btn-sm px-2 btn-outline border-red-300 text-red-500 hover:bg-red-50 w-full rounded-xl gap-2"
         >
           <LogOut size={15} />
           Logout

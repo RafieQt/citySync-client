@@ -47,7 +47,7 @@ const SolvedCards = ({ issue }) => {
             <span>{issue.upvotes?.length || 0}</span>
           </div>
           <Link to={`/issues/${issue._id}`}>
-            <button className="btn btn-sm bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
+            <button className="btn btn-sm px-2 bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
               View Details
             </button>
           </Link>

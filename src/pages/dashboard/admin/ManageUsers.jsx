@@ -83,14 +83,14 @@ const ManageUsers = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleBlock(u.email, u.status)}
-                        className={`btn btn-xs rounded-lg gap-1 ${u.status === "active" ? "btn-error btn-outline" : "btn-success btn-outline"}`}
+                        className={`btn btn-xs px-2 rounded-lg gap-1 ${u.status === "active" ? "btn-error btn-outline" : "btn-success btn-outline"}`}
                       >
                         {u.status === "active" ? <><Ban size={12} /> Block</> : <><CheckCircle size={12} /> Unblock</>}
                       </button>
                       {!u.isPremium && (
                         <button
                           onClick={() => handleMakePremium(u.email)}
-                          className="btn btn-xs btn-warning btn-outline rounded-lg gap-1"
+                          className="btn btn-xs px-2 btn-warning btn-outline rounded-lg gap-1"
                         >
                           <Crown size={12} /> Premium
                         </button>

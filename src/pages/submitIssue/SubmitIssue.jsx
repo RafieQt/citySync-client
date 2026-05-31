@@ -217,7 +217,7 @@ const SubmitIssue = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn w-full bg-[#03373D] hover:bg-[#05535D] text-white border-none rounded-xl text-lg font-semibold shadow-lg mt-4"
+                className="btn w-full px-2 bg-[#03373D] hover:bg-[#05535D] text-white border-none rounded-xl text-lg font-semibold shadow-lg mt-4"
               >
                 {submitting ? <span className="loading loading-spinner loading-sm" /> : "Submit Issue"}
               </button>

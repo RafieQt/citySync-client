@@ -86,7 +86,7 @@ const AllIssues = () => {
             placeholder="Search by title, location..."
             className="input input-bordered w-full rounded-xl"
           />
-          <button type="submit" className="btn bg-[#03373D] text-white border-none rounded-xl">
+          <button type="submit" className="btn px-2 bg-[#03373D] text-white border-none rounded-xl">
             <Search size={18} />
           </button>
         </form>
@@ -121,7 +121,7 @@ const AllIssues = () => {
         {/* Reset */}
         <button
           onClick={() => { setCategory("All"); setStatus("All"); setPriority("All"); setSearch(""); setSearchInput(""); setPage(1); }}
-          className="btn btn-outline rounded-xl"
+          className="btn px-2 btn-outline rounded-xl"
         >
           Reset
         </button>
@@ -177,14 +177,14 @@ const AllIssues = () => {
                         if (alreadyUpvoted) return toast.error("Already upvoted");
                         upvoteMutation.mutate(issue._id);
                       }}
-                      className={`btn btn-sm gap-1 rounded-xl ${alreadyUpvoted ? "bg-[#03373D] text-white" : "btn-outline border-[#03373D] text-[#03373D]"}`}
+                      className={`btn btn-sm gap-1 px-2 rounded-xl ${alreadyUpvoted ? "bg-[#03373D] text-white" : "btn-outline border-[#03373D] text-[#03373D]"}`}
                     >
                       <ChevronUp size={16} />
                       {issue.upvotes?.length || 0}
                     </button>
 
                     <Link to={`/issues/${issue._id}`}>
-                      <button className="btn btn-sm bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
+                      <button className="btn px-2 btn-sm bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
                         View Details
                       </button>
                     </Link>
@@ -202,7 +202,7 @@ const AllIssues = () => {
           <button
             onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={page === 1}
-            className="btn btn-sm btn-outline rounded-xl"
+            className="btn px-2 btn-sm btn-outline rounded-xl"
           >
             « Prev
           </button>
@@ -210,7 +210,7 @@ const AllIssues = () => {
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`btn btn-sm rounded-xl ${p === page ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
+              className={`btn px-2 btn-sm rounded-xl ${p === page ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
             >
               {p}
             </button>
@@ -218,7 +218,7 @@ const AllIssues = () => {
           <button
             onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
             disabled={page === totalPages}
-            className="btn btn-sm btn-outline rounded-xl"
+            className="btn px-2 btn-sm btn-outline rounded-xl"
           >
             Next »
           </button>

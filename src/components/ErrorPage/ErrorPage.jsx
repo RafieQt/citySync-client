@@ -21,7 +21,7 @@ const ErrorPage = () => {
                     </div>
                 </div>
                 <Link to='/'>
-                    <button className='btn bg-[#CDEEEE] text-[#03373D] mx-auto text-center w-20 font-bold'>Home</button>
+                    <button className='btn px-2 bg-[#CDEEEE] text-[#03373D] mx-auto text-center w-20 font-bold'>Home</button>
                 </Link>
             </div>
             <Footer></Footer>

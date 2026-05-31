@@ -50,7 +50,7 @@ const MyIssues = () => {
       <div className="flex flex-wrap justify-between items-center mb-6 gap-3">
         <h1 className="text-2xl font-bold text-[#03373D]">My Issues</h1>
         <Link to="/submitIssue">
-          <button className="btn bg-[#03373D] text-white border-none rounded-xl gap-2">
+          <button className="btn px-2 bg-[#03373D] text-white border-none rounded-xl gap-2">
             <PlusCircle size={18} /> Report New Issue
           </button>
         </Link>
@@ -62,7 +62,7 @@ const MyIssues = () => {
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`btn btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
+            className={`btn btn-sm px-2 rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
           >
             {s}
           </button>
@@ -75,11 +75,11 @@ const MyIssues = () => {
         <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
           <p className="text-gray-400 text-lg mb-3">No issues found.</p>
           <Link to="/submitIssue">
-            <button className="btn bg-[#03373D] text-white border-none rounded-xl">Report an Issue</button>
+            <button className="btn bg-[#03373D] px-2 text-white border-none rounded-xl">Report an Issue</button>
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div className="bg-white px-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
           <table className="table">
             <thead>
               <tr className="text-[#03373D] bg-[#EAF8F7]">
@@ -113,11 +113,11 @@ const MyIssues = () => {
                   <td>
                     <div className="flex gap-2">
                       <Link to={`/issues/${issue._id}`}>
-                        <button className="btn btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
+                        <button className="btn px-2 btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
                       </Link>
                       <button
                         onClick={() => handleDelete(issue._id)}
-                        className="btn btn-xs btn-ghost rounded-lg text-red-500"
+                        className="btn px-2 btn-xs btn-ghost rounded-lg text-red-500"
                       >
                         <Trash2 size={14} />
                       </button>

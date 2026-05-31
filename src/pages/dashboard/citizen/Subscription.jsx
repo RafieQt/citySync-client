@@ -78,7 +78,7 @@ const Subscription = () => {
           type="button"
           onClick={handleCheckout}
           disabled={processing}
-          className="btn bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl text-lg font-semibold"
+          className="btn px-2 bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl text-lg font-semibold"
         >
           {processing ? <span className="loading loading-spinner loading-sm" /> : "Pay & Upgrade via Stripe"}
         </button>

@@ -52,7 +52,7 @@ const ManageStaff = () => {
         <h1 className="text-2xl font-bold text-[#03373D]">Manage Staff</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="btn bg-[#03373D] text-white border-none rounded-xl gap-2"
+          className="btn px-2 bg-[#03373D] text-white border-none rounded-xl gap-2"
         >
           <UserPlus size={16} /> Add Staff
         </button>
@@ -109,13 +109,13 @@ const ManageStaff = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setEditStaff(s)}
-                        className="btn btn-xs btn-outline rounded-lg gap-1 border-[#03373D] text-[#03373D]"
+                        className="btn px-2 btn-xs btn-outline rounded-lg gap-1 border-[#03373D] text-[#03373D]"
                       >
                         <Pencil size={12} /> Edit
                       </button>
                       <button
                         onClick={() => setDeleteTarget(s)}
-                        className="btn btn-xs btn-error btn-outline rounded-lg gap-1"
+                        className="btn px-2 btn-xs btn-error btn-outline rounded-lg gap-1"
                       >
                         <Trash2 size={12} /> Delete
                       </button>
@@ -161,14 +161,14 @@ const ManageStaff = () => {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="btn flex-1 btn-outline rounded-xl"
+                className="btn px-2 flex-1 btn-outline rounded-xl"
               >
                 Cancel
               </button>
               <button
                 onClick={() => deleteMutation.mutate(deleteTarget.email)}
                 disabled={deleteMutation.isPending}
-                className="btn flex-1 btn-error text-white rounded-xl border-none"
+                className="btn px-2 flex-1 btn-error text-white rounded-xl border-none"
               >
                 {deleteMutation.isPending ? <span className="loading loading-spinner loading-sm" /> : "Yes, Remove"}
               </button>
@@ -235,7 +235,7 @@ const AddStaffModal = ({ onClose, onSuccess }) => {
       <div className="modal-box max-w-md rounded-2xl">
         <div className="flex justify-between items-center mb-5">
           <h3 className="font-bold text-xl text-[#03373D]">Add New Staff</h3>
-          <button onClick={onClose} className="btn btn-ghost btn-sm btn-circle">
+          <button onClick={onClose} className="btn btn-ghost px-2 btn-sm btn-circle">
             <X size={18} />
           </button>
         </div>
@@ -299,7 +299,7 @@ const AddStaffModal = ({ onClose, onSuccess }) => {
           </div>
 
           <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose} className="btn flex-1 btn-outline rounded-xl">
+            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl">
               Cancel
             </button>
             <button
@@ -307,7 +307,7 @@ const AddStaffModal = ({ onClose, onSuccess }) => {
               disabled={submitting}
               className="btn flex-1 bg-[#03373D] text-white border-none rounded-xl"
             >
-              {submitting ? <span className="loading loading-spinner loading-sm" /> : "Create Staff"}
+              {submitting ? <span className="loading px-2 loading-spinner loading-sm" /> : "Create Staff"}
             </button>
           </div>
         </form>
@@ -352,7 +352,7 @@ const EditStaffModal = ({ staff, onClose, onSubmit, isPending }) => {
       <div className="modal-box max-w-md rounded-2xl">
         <div className="flex justify-between items-center mb-5">
           <h3 className="font-bold text-xl text-[#03373D]">Edit Staff</h3>
-          <button onClick={onClose} className="btn btn-ghost btn-sm btn-circle">
+          <button onClick={onClose} className="btn px-2 btn-ghost btn-sm btn-circle">
             <X size={18} />
           </button>
         </div>
@@ -395,7 +395,7 @@ const EditStaffModal = ({ staff, onClose, onSubmit, isPending }) => {
           </div>
 
           <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose} className="btn flex-1 btn-outline rounded-xl">
+            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl">
               Cancel
             </button>
             <button

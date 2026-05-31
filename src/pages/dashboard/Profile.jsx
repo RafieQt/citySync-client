@@ -85,7 +85,7 @@ const Profile = () => {
           <button
             type="submit"
             disabled={uploading}
-            className="btn bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl font-semibold"
+            className="btn px-2 bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl font-semibold"
           >
             {uploading ? <span className="loading loading-spinner loading-sm" /> : "Save Changes"}
           </button>

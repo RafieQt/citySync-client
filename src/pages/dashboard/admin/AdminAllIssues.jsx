@@ -99,7 +99,7 @@ const AdminAllIssues = () => {
       <div className="flex gap-2 flex-wrap mb-5">
         {["All", ...STATUS_OPTIONS].map((s) => (
           <button key={s} onClick={() => { setFilter(s); setPage(1); }}
-            className={`btn btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}>
+            className={`btn px-2 btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}>
             {s}
           </button>
         ))}
@@ -160,7 +160,7 @@ const AdminAllIssues = () => {
                   </td>
                   <td>
                     <Link to={`/issues/${issue._id}`}>
-                      <button className="btn btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
+                      <button className="btn px-2 btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
                     </Link>
                   </td>
                 </tr>
@@ -175,9 +175,9 @@ const AdminAllIssues = () => {
         <div className="flex justify-center mt-6 gap-2 flex-wrap">
           <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1} className="btn btn-sm btn-outline rounded-xl">« Prev</button>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button key={p} onClick={() => setPage(p)} className={`btn btn-sm rounded-xl ${p === page ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}>{p}</button>
+            <button key={p} onClick={() => setPage(p)} className={`btn btn-sm px-2 rounded-xl ${p === page ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}>{p}</button>
           ))}
-          <button onClick={() => setPage((p) => Math.min(p + 1, totalPages))} disabled={page === totalPages} className="btn btn-sm btn-outline rounded-xl">Next »</button>
+          <button onClick={() => setPage((p) => Math.min(p + 1, totalPages))} disabled={page === totalPages} className="btn px-2 btn-sm btn-outline rounded-xl">Next »</button>
         </div>
       )}
     </div>
