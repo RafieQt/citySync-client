@@ -44,23 +44,26 @@ const AuthProvider = ({ children }) => {
   };
 
   const syncSession = async (currentUser) => {
-    const api = import.meta.env.VITE_API_URL;
-    if (!api) {
-      console.error("VITE_API_URL is not set in citysync-client/.env");
-      return;
-    }
-    try {
+  const api = import.meta.env.VITE_API_URL;
+  if (!api) {
+    console.error("VITE_API_URL is not set in citysync-client/.env");
+    return;
+  }
+  try {
+    // ✅ Only save to DB if profile is complete
+    if (currentUser.displayName && currentUser.photoURL) {
       await axios.post(`${api}/users`, {
         email: currentUser.email,
         displayName: currentUser.displayName,
         photoURL: currentUser.photoURL,
       });
-      const res = await axios.post(`${api}/jwt`, { email: currentUser.email });
-      localStorage.setItem("token", res.data.token);
-    } catch (err) {
-      console.error("Auth sync error:", err.response?.data || err.message);
     }
-  };
+    const res = await axios.post(`${api}/jwt`, { email: currentUser.email });
+    localStorage.setItem("token", res.data.token);
+  } catch (err) {
+    console.error("Auth sync error:", err.response?.data || err.message);
+  }
+};
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

@@ -37,12 +37,30 @@ const Register = () => {
                 photoURL: imgURL,
             });
 
+            console.log("data.photo:", data.photo);          // should be a FileList
+            console.log("data.photo[0]:", data.photo?.[0]);  // should be a File object
+            console.log("data.name:", data.name);
+            console.log("Sending user data...");
+            console.log("FORM DATA:", data);
+            console.log("IMG URL:", imgURL);
+            console.log("ImgBB key:", import.meta.env.VITE_image_host);
             // 4. Save to MongoDB with correct name + photo
-            await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
-                email: data.email,
-                displayName: data.name,
-                photoURL: imgURL,
-            });
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_URL}/users`,
+                    {
+                        email: data.email,
+                        name: data.name,    // ✅ send as "name" directly
+                        photo: imgURL,      // ✅ send as "photo" directly
+                    }
+                );
+
+                console.log(response.data);
+            } catch (err) {
+                console.error("POST ERROR:", err);
+            }
+
+            console.log("User saved");
 
             // 5. Success → navigate home
             await Swal.fire({
@@ -86,10 +104,9 @@ const Register = () => {
                                 type="file"
                                 accept="image/*"
                                 style={{ display: "none" }}
-                                {...rest}
-                               
+                                {...rest}          // spreads onChange, onBlur, name
                                 ref={(e) => {
-                                    ref(e);
+                                    ref(e);          // react-hook-form ref
                                     fileRef.current = e;
                                 }}
                             />
