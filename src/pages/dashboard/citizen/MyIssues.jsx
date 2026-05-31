@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import axiosSecure from "../../../utils/axiosSecure";
+import { normalizeIssuesList } from "../../../utils/normalizeIssues";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import { Trash2, Eye, PlusCircle } from "lucide-react";
@@ -25,7 +26,7 @@ const MyIssues = () => {
       const params = {};
       if (filter !== "All") params.status = filter;
       const res = await axiosSecure.get(`/issues/user/${user.email}`, { params });
-      return res.data;
+      return normalizeIssuesList(res.data);
     },
   });
 

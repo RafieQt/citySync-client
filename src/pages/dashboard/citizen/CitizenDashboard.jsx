@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 import axiosSecure from "../../../utils/axiosSecure";
+import { normalizeIssuesList } from "../../../utils/normalizeIssues";
 import { Link } from "react-router";
 import { FileText, Clock, Wrench, CheckCircle, CreditCard } from "lucide-react";
 
@@ -30,7 +31,7 @@ const CitizenDashboard = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/issues/user/${user.email}`);
-      return res.data.slice(0, 5);
+      return normalizeIssuesList(res.data).slice(0, 5);
     },
   });
 

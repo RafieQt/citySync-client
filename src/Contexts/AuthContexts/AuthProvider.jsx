@@ -43,12 +43,22 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const saveToken = async (email) => {
+  const syncSession = async (currentUser) => {
+    const api = import.meta.env.VITE_API_URL;
+    if (!api) {
+      console.error("VITE_API_URL is not set in citysync-client/.env");
+      return;
+    }
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email });
-      localStorage.setItem('token', res.data.token);
+      await axios.post(`${api}/users`, {
+        email: currentUser.email,
+        displayName: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+      });
+      const res = await axios.post(`${api}/jwt`, { email: currentUser.email });
+      localStorage.setItem("token", res.data.token);
     } catch (err) {
-      console.error('JWT error:', err);
+      console.error("Auth sync error:", err.response?.data || err.message);
     }
   };
 
@@ -56,7 +66,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        saveToken(currentUser.email);
+        syncSession(currentUser);
       } else {
         localStorage.removeItem('token');
       }

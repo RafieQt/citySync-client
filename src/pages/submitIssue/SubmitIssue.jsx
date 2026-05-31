@@ -17,17 +17,51 @@ const SubmitIssue = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmitIssue = async (data) => {
+    if (!user?.email) {
+      toast.error("Please sign in to report an issue.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Session expired. Please sign in again.");
+      return;
+    }
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (!apiUrl) {
+      toast.error("API URL is not configured. Add VITE_API_URL to .env and restart the client.");
+      return;
+    }
+
+    const issueImage = data.image?.[0];
+    if (!issueImage) {
+      toast.error("Please select a photo.");
+      return;
+    }
+
     setSubmitting(true);
     try {
-      // Upload image to imgbb
-      const issueImage = data.image[0];
       const formData = new FormData();
       formData.append("image", issueImage);
-      const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
-      const imgRes = await axios.post(imageAPIUrl, formData);
+      const imageKey = import.meta.env.VITE_image_host;
+      if (!imageKey) {
+        toast.error("Image upload key missing. Set VITE_image_host in .env.");
+        return;
+      }
+
+      const imgRes = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imageKey}`,
+        formData,
+      );
+
+      if (!imgRes.data?.success || !imgRes.data?.data?.url) {
+        const imgErr = imgRes.data?.error?.message || "Image upload failed.";
+        toast.error(imgErr);
+        return;
+      }
       const imgURL = imgRes.data.data.url;
 
-      // Submit issue to server
       const issueData = {
         title: data.title,
         description: data.description,
@@ -35,22 +69,35 @@ const SubmitIssue = () => {
         location: data.location,
         image: imgURL,
         userEmail: user.email,
-        userName: user.displayName,
-        userPhoto: user.photoURL,
+        userName: user.displayName || "Citizen",
+        userPhoto: user.photoURL || "",
       };
 
       const res = await axiosSecure.post("/issues", issueData);
 
-      if (res.data.insertedId) {
+      if (res.data?.insertedId || res.data?.acknowledged) {
         toast.success("Issue reported successfully!");
         reset();
         navigate("/dashboard/my-issues");
+      } else {
+        toast.error("Issue could not be saved. Please try again.");
       }
     } catch (error) {
       if (error.response?.status === 403) {
-        toast.error("Free users can only submit 3 issues. Upgrade to Premium!");
+        toast.error(
+          error.response?.data?.message ||
+            "Free users can only submit 3 issues. Upgrade to Premium!",
+        );
+      } else if (error.response?.status === 401) {
+        toast.error("Session expired. Please sign in again.");
+      } else if (error.response?.data?.error?.message) {
+        toast.error(error.response.data.error.message);
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else if (error.message === "Network Error") {
+        toast.error("Cannot reach the server. Is citysync-server running on port 3000?");
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error(error.message || "Something went wrong. Please try again.");
       }
     } finally {
       setSubmitting(false);

@@ -1,8 +1,8 @@
 
 import { NavLink, Outlet, useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth";
-import useUser from "../../hooks/useUser";
-import Logo from "../../components/ErrorPage/logo/Logo";
+import useAuth from "../hooks/useAuth";
+import useUser from "../hooks/useUser";
+import Logo from "../components/ErrorPage/logo/Logo";
 import {
   LayoutDashboard,
   FileText,
@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../components/Loading/Loading";
 
 const citizenLinks = [
   {

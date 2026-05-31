@@ -26,6 +26,8 @@ import AdminAllIssues from "../pages/dashboard/admin/AdminAllIssues";
 import ManageUsers from "../pages/dashboard/admin/ManageUsers";
 import ManageStaff from "../pages/dashboard/admin/ManageStaff";
 import AdminPayments from "../pages/dashboard/admin/AdminPayments";
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
+import PaymentCancel from "../pages/payment/PaymentCancel";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +47,11 @@ export const router = createBrowserRouter([
         path: "/submitIssue",
         element: <PrivateRoute><SubmitIssue /></PrivateRoute>,
       },
+      {
+        path: "/payment/success",
+        element: <PrivateRoute><PaymentSuccess /></PrivateRoute>,
+      },
+      { path: "/payment/cancel", Component: PaymentCancel },
     ],
   },
   {

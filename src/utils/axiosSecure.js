@@ -13,11 +13,11 @@ axiosSecure.interceptors.request.use((config) => {
   return config;
 });
 
-// If token expires / is invalid, log out
+// Only 401 means missing/invalid auth. 403 is also used for business rules (e.g. issue limit).
 axiosSecure.interceptors.response.use(
   (res) => res,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    if (error.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/signin";
     }

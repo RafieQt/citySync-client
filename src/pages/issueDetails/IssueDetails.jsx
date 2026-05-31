@@ -7,74 +7,14 @@ import toast from "react-hot-toast";
 import { MapPin, Tag, User, Calendar, ChevronUp, Trash2, Pencil, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
+const BOOST_AMOUNT = 1; // Stripe test charge in USD ($1.00); UI shows ৳100
 
 const statusColor = {
   pending: "badge-warning",
   "in-progress": "badge-info",
   resolved: "badge-success",
   rejected: "badge-error",
-};
-
-// ── Stripe checkout form ─────────────────────────────────────────────────────
-const BoostCheckoutForm = ({ issue, onSuccess, onCancel }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { user } = useAuth();
-  const [processing, setProcessing] = useState(false);
-
-  const handlePay = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-    setProcessing(true);
-    try {
-      // Create payment intent on server
-      const { data } = await axiosSecure.post("/create-payment-intent", { amount: 100 });
-      const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: { card: elements.getElement(CardElement) },
-      });
-
-      if (error) {
-        toast.error(error.message);
-      } else if (paymentIntent.status === "succeeded") {
-        // Save payment record + boost issue
-        await axiosSecure.post("/payments", {
-          type: "boost",
-          amount: 100,
-          issueId: issue._id,
-          issueTitle: issue.title,
-          userEmail: user.email,
-          transactionId: paymentIntent.id,
-        });
-        toast.success("Issue boosted to High Priority!");
-        onSuccess();
-      }
-    } catch {
-      toast.error("Payment failed. Please try again.");
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handlePay} className="space-y-4">
-      <div className="alert alert-info text-sm">
-        Pay <strong>৳100</strong> to boost this issue to High Priority so staff resolve it faster.
-      </div>
-      <div className="p-3 border border-gray-300 rounded-xl bg-gray-50">
-        <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
-      </div>
-      <div className="flex gap-2">
-        <button type="submit" disabled={processing || !stripe} className="btn bg-[#03373D] text-white border-none flex-1 rounded-xl">
-          {processing ? <span className="loading loading-spinner loading-sm" /> : "Pay ৳100 & Boost"}
-        </button>
-        <button type="button" onClick={onCancel} className="btn btn-outline flex-1 rounded-xl">Cancel</button>
-      </div>
-    </form>
-  );
 };
 
 // ── Edit Modal ───────────────────────────────────────────────────────────────
@@ -114,6 +54,8 @@ const EditModal = ({ issue, onClose }) => {
         imgURL = imgRes.data.data.url;
       }
       editMutation.mutate({ ...data, image: imgURL, image_: undefined });
+    } catch (error) {
+      toast.error(error.response?.data?.error?.message || error.message || "Failed to update issue.");
     } finally {
       setUploading(false);
     }
@@ -155,7 +97,7 @@ const IssueDetails = () => {
   const queryClient = useQueryClient();
 
   const [showEdit, setShowEdit] = useState(false);
-  const [showBoost, setShowBoost] = useState(false);
+  const [boosting, setBoosting] = useState(false);
 
   const { data: issue, isLoading } = useQuery({
     queryKey: ["issue", id],
@@ -182,6 +124,29 @@ const IssueDetails = () => {
     },
     onError: (err) => toast.error(err.response?.data?.message || "Could not upvote"),
   });
+
+  const handleBoostCheckout = async () => {
+    if (!user) return toast.error("Login to boost");
+    setBoosting(true);
+    try {
+      const { data } = await axiosSecure.post("/create-checkout-session", {
+        type: "boost",
+        issueId: issue._id,
+        issueTitle: issue.title,
+        userEmail: user.email,
+        amount: BOOST_AMOUNT,
+      });
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Could not start checkout");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Checkout failed");
+    } finally {
+      setBoosting(false);
+    }
+  };
 
   if (isLoading) return <div className="flex justify-center py-40"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>;
   if (!issue) return <div className="text-center py-20 text-gray-400 text-xl">Issue not found.</div>;
@@ -248,8 +213,12 @@ const IssueDetails = () => {
 
             {/* Boost — owner + not already boosted */}
             {isOwner && issue.priority !== "high" && issue.status === "pending" && (
-              <button onClick={() => setShowBoost(true)} className="btn bg-amber-500 hover:bg-amber-600 text-white border-none rounded-xl gap-2">
-                <Zap size={16} /> Boost Priority (৳100)
+              <button
+                onClick={handleBoostCheckout}
+                disabled={boosting}
+                className="btn bg-amber-500 hover:bg-amber-600 text-white border-none rounded-xl gap-2"
+              >
+                {boosting ? <span className="loading loading-spinner loading-sm" /> : <><Zap size={16} /> Boost Priority (৳100)</>}
               </button>
             )}
           </div>
@@ -298,28 +267,7 @@ const IssueDetails = () => {
         </ul>
       </div>
 
-      {/* Edit Modal */}
       {showEdit && <EditModal issue={issue} onClose={() => setShowEdit(false)} />}
-
-      {/* Boost / Payment Modal */}
-      {showBoost && (
-        <dialog open className="modal modal-open">
-          <div className="modal-box max-w-md rounded-2xl">
-            <h3 className="font-bold text-xl text-[#03373D] mb-4">Boost Issue Priority</h3>
-            <Elements stripe={stripePromise}>
-              <BoostCheckoutForm
-                issue={issue}
-                onSuccess={() => {
-                  setShowBoost(false);
-                  queryClient.invalidateQueries(["issue", id]);
-                }}
-                onCancel={() => setShowBoost(false)}
-              />
-            </Elements>
-          </div>
-          <div className="modal-backdrop" onClick={() => setShowBoost(false)} />
-        </dialog>
-      )}
     </div>
   );
 };

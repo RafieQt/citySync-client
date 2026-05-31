@@ -1,46 +1,32 @@
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 import axiosSecure from "../../../utils/axiosSecure";
 import toast from "react-hot-toast";
 import { Crown, CheckCircle } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
+const PREMIUM_AMOUNT = 5; // Stripe test charge in USD ($5.00); UI shows ৳500
 
-const SubscriptionForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
+const Subscription = () => {
   const { user } = useAuth();
   const { dbUser } = useUser();
-  const queryClient = useQueryClient();
   const [processing, setProcessing] = useState(false);
 
-  const handlePay = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
+  const handleCheckout = async () => {
     setProcessing(true);
     try {
-      const { data } = await axiosSecure.post("/create-payment-intent", { amount: 500 });
-      const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: { card: elements.getElement(CardElement) },
+      const { data } = await axiosSecure.post("/create-checkout-session", {
+        type: "subscription",
+        userEmail: user.email,
+        amount: PREMIUM_AMOUNT,
       });
-      if (error) {
-        toast.error(error.message);
-      } else if (paymentIntent.status === "succeeded") {
-        await axiosSecure.post("/payments", {
-          type: "subscription",
-          amount: 500,
-          userEmail: user.email,
-          transactionId: paymentIntent.id,
-        });
-        toast.success("You're now a Premium member! 🎉");
-        queryClient.invalidateQueries(["dbUser"]);
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Could not start checkout");
       }
-    } catch {
-      toast.error("Payment failed. Try again.");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Checkout failed. Is the server running?");
     } finally {
       setProcessing(false);
     }
@@ -64,7 +50,6 @@ const SubscriptionForm = () => {
         <p className="text-gray-500 mt-2">Unlock unlimited issue submissions and more.</p>
       </div>
 
-      {/* Benefits */}
       <div className="bg-gradient-to-br from-[#EAF8F7] to-white rounded-2xl p-6 mb-6 border border-[#03373D]/10">
         <h2 className="font-bold text-[#03373D] mb-4 text-lg">Premium Benefits</h2>
         {[
@@ -79,34 +64,28 @@ const SubscriptionForm = () => {
           </div>
         ))}
         <div className="divider" />
-        <p className="text-3xl font-extrabold text-[#03373D] text-center">৳500 <span className="text-base font-normal text-gray-400">/ one-time</span></p>
+        <p className="text-3xl font-extrabold text-[#03373D] text-center">
+          ৳500 <span className="text-base font-normal text-gray-400">/ one-time</span>
+        </p>
       </div>
 
-      {/* Payment Form */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="font-bold text-[#03373D] mb-4">Payment Details</h3>
-        <form onSubmit={handlePay} className="space-y-4">
-          <div className="p-3 border border-gray-300 rounded-xl bg-gray-50">
-            <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
-          </div>
-          <button
-            type="submit"
-            disabled={processing || !stripe}
-            className="btn bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl text-lg font-semibold"
-          >
-            {processing ? <span className="loading loading-spinner loading-sm" /> : "Pay ৳500 & Upgrade"}
-          </button>
-          <p className="text-xs text-gray-400 text-center">Payments are secure and encrypted via Stripe.</p>
-        </form>
+        <h3 className="font-bold text-[#03373D] mb-4">Secure checkout</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          You will be redirected to Stripe&apos;s hosted checkout page to complete payment.
+        </p>
+        <button
+          type="button"
+          onClick={handleCheckout}
+          disabled={processing}
+          className="btn bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl text-lg font-semibold"
+        >
+          {processing ? <span className="loading loading-spinner loading-sm" /> : "Pay & Upgrade via Stripe"}
+        </button>
+        <p className="text-xs text-gray-400 text-center mt-3">Payments are secure and encrypted via Stripe.</p>
       </div>
     </div>
   );
 };
-
-const Subscription = () => (
-  <Elements stripe={stripePromise}>
-    <SubscriptionForm />
-  </Elements>
-);
 
 export default Subscription;

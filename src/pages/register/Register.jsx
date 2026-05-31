@@ -17,53 +17,66 @@ const Register = () => {
     const { ref, ...rest } = register("photo", { required: true });
 
     const handleRegister = async (data) => {
+        try {
+            const profileImage = data.photo[0];
+            const formData = new FormData();
+            formData.append("image", profileImage);
+            const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+            const imgRes = await axios.post(imageAPIUrl, formData);
+            const imgURL = imgRes.data.data.url;
+            console.log("res: ", imgRes);
+            console.log(data);
 
-        const profileImage = data.photo[0];
-        const formData = new FormData();
-        formData.append("image", profileImage);
-        const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
-        const imgRes = await axios.post(imageAPIUrl, formData);
-        const imgURL = imgRes.data.data.url;
-        console.log("res: ", imgRes);
-        console.log(data);
-
-        registerUser(data.email, data.password)
-            .then(res => {
-                console.log("regs ", res);
-                const user = res.user;
-                return updateProfile(user, {
-                    photoURL: imgURL,
-                    displayName: data.name
-                });
-
-            }).then(() => {
-                return {
-                    email: data.email,
-                    displayName: data.name,
-                    photoURL: imgURL
-                };
-            }
-            ).then(userInfo => {
-               return axios.post(`http://localhost:3000/users`, userInfo)
-            }).then(res => {
-                if (res.data.insertedId) {
-                    console.log("user created!");
-                }
-            })
-            .catch(error => {
-                if (error.code == "auth/email-already-in-use") {
-                    Swal.fire({
-                        title: "The email is already used!",
-                        imageUrl: "https://img.icons8.com/?size=100&id=13826&format=png&color=000000",
-                        imageWidth: 100,
-                        imageHeight: 100,
-                        imageAlt: "Custom image"
+            registerUser(data.email, data.password)
+                .then(res => {
+                    console.log("regs ", res);
+                    const user = res.user;
+                    return updateProfile(user, {
+                        photoURL: imgURL,
+                        displayName: data.name
                     });
-                } else {
-                    console.log(error);
-                }
-            })
 
+                }).then(() => {
+                    return {
+                        email: data.email,
+                        displayName: data.name,
+                        photoURL: imgURL
+                    };
+                }
+                ).then(userInfo => {
+                   return axios.post(`${import.meta.env.VITE_API_URL}/users`, userInfo)
+                }).then(res => {
+                    if (res.data.insertedId) {
+                        console.log("user created!");
+                    }
+                })
+                .catch(error => {
+                    if (error.code == "auth/email-already-in-use") {
+                        Swal.fire({
+                            title: "The email is already used!",
+                            imageUrl: "https://img.icons8.com/?size=100&id=13826&format=png&color=000000",
+                            imageWidth: 100,
+                            imageHeight: 100,
+                            imageAlt: "Custom image"
+                        });
+                    } else {
+                        console.log(error);
+                        Swal.fire({
+                            title: "Error",
+                            text: error.message || "Registration failed",
+                            icon: "error"
+                        });
+                    }
+                })
+        } catch (error) {
+            console.error("Registration error:", error);
+            const errorMsg = error.response?.data?.error?.message || error.message || "Something went wrong during registration.";
+            Swal.fire({
+                title: "Registration Failed",
+                text: errorMsg,
+                icon: "error"
+            });
+        }
     }
     return (
         <div className="flex gap-3 items-center justify-between bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] w-full rounded-lg p-5 px-20 mb-2 mt-10">
