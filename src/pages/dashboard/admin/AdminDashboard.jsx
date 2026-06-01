@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosSecure from "../../../utils/axiosSecure";
-import { FileText, CheckCircle, Clock, XCircle, CreditCard} from "lucide-react";
+import { FileText, CheckCircle, Clock, XCircle, CreditCard } from "lucide-react";
 import { Link } from "react-router";
 
 const statusColor = {
@@ -19,7 +19,12 @@ const AdminDashboard = () => {
     },
   });
 
-  if (isLoading) return <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-20">
+        <span className="loading loading-spinner loading-lg text-[#03373D]" />
+      </div>
+    );
 
   const statCards = [
     { label: "Total Issues", value: stats?.totalIssues || 0, icon: <FileText size={22} />, color: "bg-blue-50 text-blue-600" },
@@ -33,16 +38,19 @@ const AdminDashboard = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#03373D]">Admin Dashboard</h1>
-        <p className="text-gray-500 mt-1">System-wide overview and management.</p>
+        <p className="text-gray-500 mt-1 text-sm">System-wide overview and management.</p>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+      {/* Stat Cards — 2-col on mobile, 3 on md, 5 on lg */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
         {statCards.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm p-4 flex flex-col items-center gap-2 border border-gray-100">
+          <div
+            key={s.label}
+            className="bg-white rounded-2xl shadow-sm p-4 flex flex-col items-center gap-2 border border-gray-100"
+          >
             <div className={`p-2 rounded-xl ${s.color}`}>{s.icon}</div>
-            <p className="text-2xl font-bold text-[#03373D]">{s.value}</p>
-            <p className="text-xs text-gray-500 text-center">{s.label}</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#03373D]">{s.value}</p>
+            <p className="text-xs text-gray-500 text-center leading-tight">{s.label}</p>
           </div>
         ))}
       </div>
@@ -52,15 +60,24 @@ const AdminDashboard = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-bold text-[#03373D]">Latest Issues</h2>
-            <Link to="/dashboard/all-issues-admin" className="text-sm text-[#03373D] hover:underline">View All →</Link>
+            <Link to="/dashboard/all-issues-admin" className="text-sm text-[#03373D] hover:underline whitespace-nowrap">
+              View All →
+            </Link>
           </div>
           {stats?.latestIssues?.map((issue) => (
-            <div key={issue._id} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-              <div>
-                <p className="text-sm font-medium text-[#03373D] truncate max-w-[200px]">{issue.title}</p>
+            <div
+              key={issue._id}
+              className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0 gap-2"
+            >
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-[#03373D] truncate max-w-[180px] sm:max-w-[240px]">
+                  {issue.title}
+                </p>
                 <p className="text-xs text-gray-400">{issue.category}</p>
               </div>
-              <span className={`badge badge-sm ${statusColor[issue.status]} capitalize`}>{issue.status}</span>
+              <span className={`badge badge-sm ${statusColor[issue.status]} capitalize flex-shrink-0`}>
+                {issue.status}
+              </span>
             </div>
           ))}
         </div>
@@ -69,15 +86,22 @@ const AdminDashboard = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-bold text-[#03373D]">Latest Payments</h2>
-            <Link to="/dashboard/payments" className="text-sm text-[#03373D] hover:underline">View All →</Link>
+            <Link to="/dashboard/payments" className="text-sm text-[#03373D] hover:underline whitespace-nowrap">
+              View All →
+            </Link>
           </div>
           {stats?.latestPayments?.map((p) => (
-            <div key={p._id} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-              <div>
-                <p className="text-sm font-medium text-[#03373D] truncate max-w-[200px]">{p.userEmail}</p>
+            <div
+              key={p._id}
+              className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0 gap-2"
+            >
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-[#03373D] truncate max-w-[180px] sm:max-w-[240px]">
+                  {p.userEmail}
+                </p>
                 <p className="text-xs text-gray-400 capitalize">{p.type}</p>
               </div>
-              <span className="font-bold text-[#03373D]">৳{p.amount}</span>
+              <span className="font-bold text-[#03373D] flex-shrink-0">৳{p.amount}</span>
             </div>
           ))}
         </div>
@@ -86,12 +110,14 @@ const AdminDashboard = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 lg:col-span-2">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-bold text-[#03373D]">Latest Users</h2>
-            <Link to="/dashboard/manage-users" className="text-sm text-[#03373D] hover:underline">View All →</Link>
+            <Link to="/dashboard/manage-users" className="text-sm text-[#03373D] hover:underline whitespace-nowrap">
+              View All →
+            </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {stats?.latestUsers?.map((u) => (
               <div key={u._id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50">
-                <div className="avatar placeholder">
+                <div className="avatar placeholder flex-shrink-0">
                   <div className="w-9 rounded-full bg-[#03373D] text-white">
                     <span className="text-sm">{u.name?.charAt(0) || u.email?.charAt(0)}</span>
                   </div>
