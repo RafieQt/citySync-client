@@ -1,4 +1,6 @@
 import Banner from "../../components/banner/Banner";
+import CategoriesShowcase from "../../components/categories/CategoriesShowcase";
+import CTABanner from "../../components/ctaBanner/CTABanner";
 import Features from "../../components/features/Features";
 import RecentSolves from "../../components/recentSolves/RecentSolves";
 
@@ -9,6 +11,8 @@ const HomePage = () => {
             <Banner></Banner>
             <RecentSolves></RecentSolves>
             <Features></Features>
+            <CategoriesShowcase />
+            <CTABanner></CTABanner>
         </div>
     );
 };
