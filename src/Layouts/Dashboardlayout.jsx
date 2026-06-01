@@ -145,7 +145,7 @@ const SidebarContent = ({
       ))}
 
       <div className="mt-auto">
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-50 mb-2">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-50 mb-2 min-w-0">
           <img
             src={user?.photoURL || "/default-avatar.png"}
             className="w-9 h-9 rounded-full object-cover"
@@ -197,7 +197,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 max-w-full overflow-x-hidden">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-gray-100 shadow-sm fixed h-full">
         <SidebarContent
@@ -212,7 +212,7 @@ const DashboardLayout = () => {
       {/* Mobile Sidebar */}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="w-64 bg-white shadow-xl">
+          <div className="w-64 max-w-[80vw] bg-white shadow-xl overflow-y-auto">
             <div className="flex justify-end p-3">
               <button onClick={() => setSidebarOpen(false)}>
                 <X size={22} />
@@ -236,7 +236,7 @@ const DashboardLayout = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 min-h-screen">
+      <main className="flex-1 lg:ml-64 min-h-screen min-w-0 overflow-x-hidden">
         {/* Mobile Topbar */}
         <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100 shadow-sm">
           <button
@@ -249,7 +249,7 @@ const DashboardLayout = () => {
           <Logo />
         </div>
 
-        <div className="p-6">
+        <div className="p-3 sm:p-4 md:p-6 max-w-full">
           <Outlet />
         </div>
       </main>
