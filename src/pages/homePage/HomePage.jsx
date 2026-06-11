@@ -11,8 +11,8 @@ const HomePage = () => {
         <div>
             <HeroBanner></HeroBanner>
             
-            <RecentSolves></RecentSolves>
             <Features></Features>
+            <RecentSolves></RecentSolves>
             <CategoriesShowcase />
             <Banner></Banner>
         </div>

@@ -33,8 +33,8 @@ const Footer = () => {
 
         <nav>
           <h6 className="footer-title" style={{ color: "var(--color-accent)", opacity: 0.9 }}>Company</h6>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
+          <Link to="/aboutUs" className="link link-hover">About us</Link>
+          <Link to="/contactUs" className="link link-hover">Contact</Link>
           <a className="link link-hover">Jobs</a>
         </nav>
 

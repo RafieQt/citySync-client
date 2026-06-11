@@ -28,6 +28,8 @@ import ManageStaff from "../pages/dashboard/admin/ManageStaff";
 import AdminPayments from "../pages/dashboard/admin/AdminPayments";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import PaymentCancel from "../pages/payment/PaymentCancel";
+import ContactPage from "../pages/contactUs/ContactPage";
+import AboutPage from "../pages/aboutUs/AboutPage";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +54,8 @@ export const router = createBrowserRouter([
         element: <PrivateRoute><PaymentSuccess /></PrivateRoute>,
       },
       { path: "/payment/cancel", Component: PaymentCancel },
+      { path: "/contactUs", Component: ContactPage },
+      { path: "/aboutUs", Component: AboutPage },
     ],
   },
   {
