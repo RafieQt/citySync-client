@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
-import { User, Mail, MapPin, Calendar, Camera, Crown } from "lucide-react";
+import {  Mail, MapPin, Camera, Crown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import axiosSecure from "../../utils/axiosSecure";
 import axios from "axios";

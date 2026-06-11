@@ -5,7 +5,7 @@ import axiosSecure from "../../utils/axiosSecure";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
-import { Search, ChevronUp, MapPin, Tag, Calendar } from "lucide-react";
+import { Search, ChevronUp, MapPin, Tag} from "lucide-react";
 
 const CATEGORIES = ["All", "Road Damage", "Streetlight", "Water Leakage", "Garbage Overflow", "Footpath Damage", "Drainage", "Traffic Signal", "Other"];
 const STATUSES = ["All", "pending", "in-progress", "resolved", "rejected"];
@@ -116,12 +116,12 @@ const AllIssues = () => {
           </button>
         </form>
 
-        <div className="flex gap-2 w-full md:w-auto flex-wrap sm:flex-nowrap">
+        <div className="flex gap-2 w-full md:w-auto flex-wrap sm:flex-nowrap min-w-0 overflow-hidden">
           {/* Category */}
           <select
             value={category}
             onChange={handleFilterChange(setCategory)}
-            className="select select-bordered cs-input flex-1"
+            className="select select-bordered cs-input flex-1 min-w-0 appearance-none"
           >
             {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
           </select>
@@ -130,7 +130,7 @@ const AllIssues = () => {
           <select
             value={status}
             onChange={handleFilterChange(setStatus)}
-            className="select select-bordered cs-input flex-1"
+            className="select select-bordered cs-input flex-1 min-w-0 appearance-none"
           >
             {STATUSES.map((s) => <option key={s}>{s}</option>)}
           </select>
@@ -139,7 +139,7 @@ const AllIssues = () => {
           <select
             value={priority}
             onChange={handleFilterChange(setPriority)}
-            className="select select-bordered cs-input flex-1"
+            className="select select-bordered cs-input flex-1 min-w-0 appearance-none"
           >
             {PRIORITIES.map((p) => <option key={p}>{p}</option>)}
           </select>

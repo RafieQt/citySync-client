@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { MapPin, Tag, User, Calendar, ChevronUp, Trash2, Pencil, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-const BOOST_AMOUNT = 1; // Stripe test charge in USD ($1.00); UI shows ৳100
+const BOOST_AMOUNT = 100; // Stripe test charge in USD ($1.00); UI shows ৳100
 
 const statusBadgeClass = {
   resolved: "cs-badge cs-badge--resolved",

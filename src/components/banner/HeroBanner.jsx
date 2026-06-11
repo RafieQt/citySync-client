@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 
 const VERT = `
   attribute vec2 a_pos;
@@ -225,7 +226,7 @@ export default function HeroBanner() {
       `}</style>
 
             <div
-                className="relative overflow-hidden flex flex-col items-center justify-center min-h-[92vh] px-6 py-20 text-center"
+                className="relative overflow-hidden flex flex-col items-center justify-center min-h-[85vh] px-6 py-20 text-center rounded-2xl"
                 style={{ background: "#0d2420" }}
             >
                 <ShaderCanvas />
@@ -279,6 +280,7 @@ export default function HeroBanner() {
                         style={fade(phase >= 5)}
                         className="flex flex-wrap gap-3 justify-center"
                     >
+                        <Link to="/submitIssue">
                         <button
                             className="px-7 py-[14px] rounded-xl font-bold text-[15px] border-none cursor-pointer transition-all duration-150"
                             style={{
@@ -297,6 +299,8 @@ export default function HeroBanner() {
                         >
                             Report an Issue
                         </button>
+                        </Link>
+                        <Link to="/all-issues">
                         <button
                             className="px-7 py-[14px] rounded-xl font-semibold text-[15px] cursor-pointer transition-all duration-150"
                             style={{
@@ -314,8 +318,9 @@ export default function HeroBanner() {
                                 e.currentTarget.style.borderColor = "rgba(255,244,225,0.2)";
                             }}
                         >
-                            View Open Issues
+                            Browse Issues
                         </button>
+                        </Link>
                     </div>
 
                     {/* Pills */}
@@ -323,9 +328,9 @@ export default function HeroBanner() {
                         style={fade(phase >= 6)}
                         className="flex flex-wrap gap-[10px] justify-center"
                     >
-                        <StatPill label="2,400+ issues resolved" delay={900} />
+                        {/* <StatPill label="2,400+ issues resolved" delay={900} /> */}
                         <StatPill label="Avg. 48h response" delay={1050} />
-                        <StatPill label="12 districts covered" delay={1200} />
+                        <StatPill label="64 districts covered" delay={1200} />
                     </div>
                 </div>
             </div>

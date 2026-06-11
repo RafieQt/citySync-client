@@ -26,7 +26,7 @@ const Footer = () => {
 
         <nav>
           <h6 className="footer-title" style={{ color: "var(--color-accent)", opacity: 0.9 }}>Services</h6>
-          <a className="link link-hover">Report Issue</a>
+          <Link to='/submitIssue'><a className="link link-hover">Report Issue</a></Link>
           <a className="link link-hover">Track Status</a>
           <a className="link link-hover">Premium Boost</a>
         </nav>

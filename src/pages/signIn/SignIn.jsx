@@ -78,7 +78,7 @@ const SignIn = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => fillDemoAndSubmit("citizen@gmail.com", "123456")}
+                  onClick={() => fillDemoAndSubmit("citizen@citysync.com", "123456")}
                   className="cs-btn-outline"
                   style={{ padding: "4px 12px", fontSize: "0.8rem" }}
                 >

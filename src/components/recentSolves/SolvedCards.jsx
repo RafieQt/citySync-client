@@ -1,12 +1,12 @@
 import { Link } from "react-router";
 import { MapPin, Tag, Calendar, ChevronUp } from "lucide-react";
 
-const statusBadgeClass = {
-  resolved: "cs-badge cs-badge--resolved",
-  pending: "cs-badge cs-badge--pending",
-  "in-progress": "cs-badge cs-badge--progress",
-  rejected: "cs-badge cs-badge--rejected",
-};
+// const statusBadgeClass = {
+//   resolved: "cs-badge cs-badge--resolved",
+//   pending: "cs-badge cs-badge--pending",
+//   "in-progress": "cs-badge cs-badge--progress",
+//   rejected: "cs-badge cs-badge--rejected",
+// };
 
 const SolvedCards = ({ issue }) => {
   return (
