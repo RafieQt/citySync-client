@@ -39,6 +39,26 @@ const Navbar = () => {
           Report Issue
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to="/aboutUs"
+          className={({ isActive }) =>
+            `cs-nav-link${isActive ? " active" : ""}`
+          }
+        >
+          About Us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/contactUs"
+          className={({ isActive }) =>
+            `cs-nav-link${isActive ? " active" : ""}`
+          }
+        >
+          Contact Us
+        </NavLink>
+      </li>
     </>
   );
 

@@ -85,7 +85,7 @@ const INFO = [
             </svg>
         ),
         label: "Email us",
-        value: "hello@civicfix.gov\nWe reply within 24 hours",
+        value: "hello@citysync.com\nWe reply within 24 hours",
     },
 ];
 
@@ -184,7 +184,7 @@ export default function ContactPage() {
                                         <div>
                                             <label style={labelStyle}>Full name</label>
                                             <input
-                                                type="text" placeholder="Rafi Ahmed" required
+                                                type="text" placeholder="John Doe" required
                                                 value={form.name} onChange={set("name")}
                                                 onFocus={() => setFocused("name")} onBlur={() => setFocused(null)}
                                                 style={inputStyle("name")}
@@ -193,7 +193,7 @@ export default function ContactPage() {
                                         <div>
                                             <label style={labelStyle}>Email address</label>
                                             <input
-                                                type="email" placeholder="rafi@example.com" required
+                                                type="email" placeholder="john@example.com" required
                                                 value={form.email} onChange={set("email")}
                                                 onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
                                                 style={inputStyle("email")}
