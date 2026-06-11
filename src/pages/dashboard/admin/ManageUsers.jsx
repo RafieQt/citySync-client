@@ -36,15 +36,15 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#03373D] mb-6">Manage Users</h1>
+      <h1 className="text-2xl font-bold mb-6" style={{ color: "var(--color-text-heading)" }}>Manage Users</h1>
 
       {isLoading ? (
-        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>
+        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} /></div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div className="cs-surface overflow-x-auto">
           <table className="table">
             <thead>
-              <tr className="text-[#03373D] bg-[#EAF8F7]">
+              <tr style={{ color: "var(--color-text-heading)", backgroundColor: "var(--color-surface-hover)" }}>
                 <th>User</th>
                 <th>Email</th>
                 <th>Status</th>
@@ -53,20 +53,20 @@ const ManageUsers = () => {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ color: "var(--color-text-body)" }}>
               {users.map((u) => (
-                <tr key={u._id} className="hover">
+                <tr key={u._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar placeholder">
-                        <div className="w-9 rounded-full bg-[#03373D] text-white">
+                        <div className="w-9 rounded-full" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                           <span className="text-sm">{u.name?.charAt(0) || u.email?.charAt(0)?.toUpperCase()}</span>
                         </div>
                       </div>
                       <p className="font-medium text-sm">{u.name || "—"}</p>
                     </div>
                   </td>
-                  <td className="text-xs text-gray-500">{u.email}</td>
+                  <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{u.email}</td>
                   <td>
                     <span className={`badge badge-sm ${u.status === "active" ? "badge-success" : "badge-error"}`}>
                       {u.status}
@@ -74,11 +74,11 @@ const ManageUsers = () => {
                   </td>
                   <td>
                     {u.isPremium
-                      ? <span className="badge badge-warning badge-sm">Premium</span>
+                      ? <span className="badge badge-warning badge-sm text-white">Premium</span>
                       : <span className="badge badge-ghost badge-sm">Free</span>
                     }
                   </td>
-                  <td className="text-xs text-gray-400">{new Date(u.createdAt).toLocaleDateString()}</td>
+                  <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td>
                     <div className="flex gap-2">
                       <button

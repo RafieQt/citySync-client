@@ -45,10 +45,11 @@ const ManageStaff = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#03373D]">Manage Staff</h1>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>Manage Staff</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="btn px-3 bg-[#03373D] text-white border-none rounded-xl gap-2"
+          className="btn px-3 border-none rounded-xl gap-2"
+          style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
         >
           <UserPlus size={16} />
           <span className="hidden sm:inline">Add Staff</span>
@@ -57,19 +58,19 @@ const ManageStaff = () => {
 
       {isLoading ? (
         <div className="flex justify-center py-20">
-          <span className="loading loading-spinner loading-lg text-[#03373D]" />
+          <span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} />
         </div>
       ) : staffList.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100 text-gray-400">
+        <div className="text-center py-16 cs-surface" style={{ color: "var(--color-text-muted)" }}>
           No staff members yet. Click "Add Staff" to create one.
         </div>
       ) : (
         <>
           {/* ── Desktop table (md+) ── */}
-          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+          <div className="hidden md:block cs-surface overflow-x-auto">
             <table className="table">
               <thead>
-                <tr className="text-[#03373D] bg-[#EAF8F7]">
+                <tr style={{ backgroundColor: "var(--color-surface-hover)", color: "var(--color-text-heading)" }}>
                   <th>Staff Member</th>
                   <th>Email</th>
                   <th>Phone</th>
@@ -78,16 +79,16 @@ const ManageStaff = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{ color: "var(--color-text-body)" }}>
                 {staffList.map((s) => (
-                  <tr key={s._id} className="hover">
+                  <tr key={s._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
                     <td>
                       <div className="flex items-center gap-3">
                         {s.photo ? (
                           <img src={s.photo} className="w-9 h-9 rounded-full object-cover" alt={s.name} />
                         ) : (
                           <div className="avatar placeholder">
-                            <div className="w-9 rounded-full bg-[#03373D] text-white">
+                            <div className="w-9 rounded-full" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                               <span>{s.name?.charAt(0) || "S"}</span>
                             </div>
                           </div>
@@ -95,19 +96,20 @@ const ManageStaff = () => {
                         <p className="font-medium text-sm">{s.name || "Staff"}</p>
                       </div>
                     </td>
-                    <td className="text-xs text-gray-500">{s.email}</td>
-                    <td className="text-xs text-gray-500">{s.phone || "—"}</td>
+                    <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{s.email}</td>
+                    <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{s.phone || "—"}</td>
                     <td>
                       <span className={`badge badge-sm ${s.status === "active" ? "badge-success" : "badge-error"}`}>
                         {s.status}
                       </span>
                     </td>
-                    <td className="text-xs text-gray-400">{new Date(s.createdAt).toLocaleDateString()}</td>
+                    <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
                     <td>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setEditStaff(s)}
-                          className="btn px-2 btn-xs btn-outline rounded-lg gap-1 border-[#03373D] text-[#03373D]"
+                          className="btn px-2 btn-xs btn-outline rounded-lg gap-1"
+                          style={{ borderColor: "var(--color-primary)", color: "var(--color-primary)" }}
                         >
                           <Pencil size={12} /> Edit
                         </button>
@@ -128,36 +130,37 @@ const ManageStaff = () => {
           {/* ── Mobile cards (< md) ── */}
           <div className="flex flex-col gap-3 md:hidden">
             {staffList.map((s) => (
-              <div key={s._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div key={s._id} className="cs-surface p-4">
                 <div className="flex items-center gap-3">
                   {s.photo ? (
                     <img src={s.photo} className="w-12 h-12 rounded-full object-cover flex-shrink-0" alt={s.name} />
                   ) : (
                     <div className="avatar placeholder flex-shrink-0">
-                      <div className="w-12 rounded-full bg-[#03373D] text-white">
+                      <div className="w-12 rounded-full" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                         <span className="text-base">{s.name?.charAt(0) || "S"}</span>
                       </div>
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-[#03373D] truncate">{s.name || "Staff"}</p>
-                    <p className="text-xs text-gray-400 truncate">{s.email}</p>
+                    <p className="font-semibold text-sm truncate" style={{ color: "var(--color-text-heading)" }}>{s.name || "Staff"}</p>
+                    <p className="text-xs truncate" style={{ color: "var(--color-text-muted)" }}>{s.email}</p>
                     <div className="flex gap-2 mt-1 flex-wrap">
                       <span className={`badge badge-xs ${s.status === "active" ? "badge-success" : "badge-error"}`}>
                         {s.status}
                       </span>
-                      <span className="text-xs text-gray-400">{s.phone || "No phone"}</span>
+                      <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{s.phone || "No phone"}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                  <p className="text-xs text-gray-400">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t" style={{ borderColor: "var(--color-border)" }}>
+                  <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>
                     Joined {new Date(s.createdAt).toLocaleDateString()}
                   </p>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setEditStaff(s)}
-                      className="btn px-2 btn-xs btn-outline rounded-lg gap-1 border-[#03373D] text-[#03373D]"
+                      className="btn px-2 btn-xs btn-outline rounded-lg gap-1"
+                      style={{ borderColor: "var(--color-primary)", color: "var(--color-primary)" }}
                     >
                       <Pencil size={12} /> Edit
                     </button>
@@ -196,14 +199,14 @@ const ManageStaff = () => {
 
       {deleteTarget && (
         <dialog open className="modal modal-open">
-          <div className="modal-box max-w-sm rounded-2xl text-center mx-4">
+          <div className="modal-box max-w-sm cs-surface text-center mx-4">
             <div className="text-5xl mb-3">🗑️</div>
-            <h3 className="font-bold text-lg text-[#03373D]">Remove Staff Member?</h3>
-            <p className="text-gray-500 mt-2 text-sm">
+            <h3 className="font-bold text-lg" style={{ color: "var(--color-text-heading)" }}>Remove Staff Member?</h3>
+            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
               Are you sure you want to remove <strong>{deleteTarget.name}</strong>? This action cannot be undone.
             </p>
             <div className="flex gap-3 mt-5">
-              <button onClick={() => setDeleteTarget(null)} className="btn px-2 flex-1 btn-outline rounded-xl">
+              <button onClick={() => setDeleteTarget(null)} className="btn px-2 flex-1 btn-outline rounded-xl" style={{ color: "var(--color-primary)", borderColor: "var(--color-border)" }}>
                 Cancel
               </button>
               <button
@@ -266,62 +269,63 @@ const AddStaffModal = ({ onClose, onSuccess }) => {
 
   return (
     <dialog open className="modal modal-open">
-      <div className="modal-box max-w-md rounded-2xl mx-4 w-full">
+      <div className="modal-box max-w-md cs-surface mx-4 w-full">
         <div className="flex justify-between items-center mb-5">
-          <h3 className="font-bold text-xl text-[#03373D]">Add New Staff</h3>
-          <button onClick={onClose} className="btn btn-ghost px-2 btn-sm btn-circle">
+          <h3 className="font-bold text-xl" style={{ color: "var(--color-text-heading)" }}>Add New Staff</h3>
+          <button onClick={onClose} className="btn btn-ghost px-2 btn-sm btn-circle" style={{ color: "var(--color-text-muted)" }}>
             <X size={18} />
           </button>
         </div>
         <form onSubmit={handleSubmit(handleAdd)} className="space-y-3">
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Full Name</label>
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Full Name</label>
             <input
               {...register("name", { required: "Name is required" })}
-              className="input input-bordered w-full rounded-xl"
+              className="input input-bordered w-full rounded-xl cs-input"
               placeholder="e.g. Rahim Uddin"
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Email</label>
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Email</label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className="input input-bordered w-full rounded-xl"
+              className="input input-bordered w-full rounded-xl cs-input"
               placeholder="staff@email.com"
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Phone</label>
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Phone</label>
             <input
               {...register("phone", { required: "Phone is required" })}
-              className="input input-bordered w-full rounded-xl"
+              className="input input-bordered w-full rounded-xl cs-input"
               placeholder="01XXXXXXXXX"
             />
             {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Password</label>
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Password</label>
             <input
               type="password"
               {...register("password", { required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } })}
-              className="input input-bordered w-full rounded-xl"
+              className="input input-bordered w-full rounded-xl cs-input"
               placeholder="Min 6 characters"
             />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Profile Photo (optional)</label>
-            <input type="file" accept="image/*" {...register("photo")} className="file-input file-input-bordered w-full rounded-xl" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Profile Photo (optional)</label>
+            <input type="file" accept="image/*" {...register("photo")} className="file-input file-input-bordered w-full rounded-xl cs-input" />
           </div>
           <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl">Cancel</button>
+            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl" style={{ borderColor: "var(--color-border)", color: "var(--color-text-body)" }}>Cancel</button>
             <button
               type="submit"
               disabled={submitting}
-              className="btn flex-1 bg-[#03373D] text-white border-none rounded-xl"
+              className="btn flex-1 border-none rounded-xl"
+              style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
             >
               {submitting ? <span className="loading px-2 loading-spinner loading-sm" /> : "Create Staff"}
             </button>
@@ -365,10 +369,10 @@ const EditStaffModal = ({ staff, onClose, onSubmit, isPending }) => {
 
   return (
     <dialog open className="modal modal-open">
-      <div className="modal-box max-w-md rounded-2xl mx-4 w-full">
+      <div className="modal-box max-w-md cs-surface mx-4 w-full">
         <div className="flex justify-between items-center mb-5">
-          <h3 className="font-bold text-xl text-[#03373D]">Edit Staff</h3>
-          <button onClick={onClose} className="btn px-2 btn-ghost btn-sm btn-circle">
+          <h3 className="font-bold text-xl" style={{ color: "var(--color-text-heading)" }}>Edit Staff</h3>
+          <button onClick={onClose} className="btn px-2 btn-ghost btn-sm btn-circle" style={{ color: "var(--color-text-muted)" }}>
             <X size={18} />
           </button>
         </div>
@@ -376,38 +380,39 @@ const EditStaffModal = ({ staff, onClose, onSubmit, isPending }) => {
           {staff.photo && (
             <div className="flex items-center gap-3 mb-2">
               <img src={staff.photo} className="w-12 h-12 rounded-full object-cover" alt={staff.name} />
-              <p className="text-sm text-gray-500">Current photo</p>
+              <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Current photo</p>
             </div>
           )}
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Full Name</label>
-            <input {...register("name", { required: true })} className="input input-bordered w-full rounded-xl" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Full Name</label>
+            <input {...register("name", { required: true })} className="input input-bordered w-full rounded-xl cs-input" />
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Email</label>
-            <input value={staff.email} disabled className="input input-bordered w-full rounded-xl bg-gray-50 cursor-not-allowed" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Email</label>
+            <input value={staff.email} disabled className="input input-bordered w-full rounded-xl cs-input cursor-not-allowed" style={{ opacity: 0.6 }} />
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Phone</label>
-            <input {...register("phone")} className="input input-bordered w-full rounded-xl" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Phone</label>
+            <input {...register("phone")} className="input input-bordered w-full rounded-xl cs-input" />
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Status</label>
-            <select {...register("status")} className="select select-bordered w-full rounded-xl">
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Status</label>
+            <select {...register("status")} className="select select-bordered w-full rounded-xl cs-input">
               <option value="active">Active</option>
               <option value="blocked">Blocked</option>
             </select>
           </div>
           <div>
-            <label className="label text-sm font-semibold text-[#03373D]">Update Photo (optional)</label>
-            <input type="file" accept="image/*" {...register("photo")} className="file-input file-input-bordered w-full rounded-xl" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Update Photo (optional)</label>
+            <input type="file" accept="image/*" {...register("photo")} className="file-input file-input-bordered w-full rounded-xl cs-input" />
           </div>
           <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl">Cancel</button>
+            <button type="button" onClick={onClose} className="btn px-2 flex-1 btn-outline rounded-xl" style={{ borderColor: "var(--color-border)", color: "var(--color-text-body)" }}>Cancel</button>
             <button
               type="submit"
               disabled={isPending || uploading}
-              className="btn flex-1 bg-[#03373D] text-white border-none rounded-xl"
+              className="btn flex-1 border-none rounded-xl"
+              style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
             >
               {isPending || uploading ? <span className="loading loading-spinner loading-sm" /> : "Save Changes"}
             </button>

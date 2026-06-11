@@ -3,14 +3,14 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 const CATEGORIES = [
-  { name: "Road Damage", icon: "🛣️" },
-  { name: "Streetlight", icon: "💡" },
-  { name: "Water Leakage", icon: "💧" },
-  { name: "Garbage Overflow", icon: "🗑️" },
+  { name: "Road Damage",      icon: "🛣️" },
+  { name: "Streetlight",     icon: "💡" },
+  { name: "Water Leakage",   icon: "💧" },
+  { name: "Garbage Overflow",icon: "🗑️" },
   { name: "Footpath Damage", icon: "🚶" },
-  { name: "Drainage", icon: "🌊" },
-  { name: "Traffic Signal", icon: "🚦" },
-  { name: "Other", icon: "🔧" },
+  { name: "Drainage",        icon: "🌊" },
+  { name: "Traffic Signal",  icon: "🚦" },
+  { name: "Other",           icon: "🔧" },
 ];
 
 const CategoriesShowcase = () => {
@@ -19,7 +19,9 @@ const CategoriesShowcase = () => {
   const { data: issues = [] } = useQuery({
     queryKey: ["allIssuesForCategories"],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/issues?limit=1000`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/issues?limit=1000`
+      );
       return res.data.result;
     },
   });
@@ -30,8 +32,13 @@ const CategoriesShowcase = () => {
   return (
     <div className="mt-7">
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-extrabold text-[#03373D]">Browse by Category</h2>
-        <p className="text-gray-500 mt-2">
+        <h2
+          className="text-3xl sm:text-4xl font-extrabold"
+          style={{ color: "var(--color-text-heading)" }}
+        >
+          Browse by Category
+        </h2>
+        <p className="mt-2 text-sm sm:text-base" style={{ color: "var(--color-text-muted)" }}>
           Find and filter issues by type across your city.
         </p>
       </div>
@@ -40,19 +47,50 @@ const CategoriesShowcase = () => {
         {CATEGORIES.map((cat) => {
           const count = getCount(cat.name);
           return (
-            <div
+            <button
               key={cat.name}
-              onClick={() => navigate(`/all-issues?category=${encodeURIComponent(cat.name)}`)}
-              className="cursor-pointer group bg-white border border-gray-100 rounded-2xl p-5 flex flex-col items-center gap-3 shadow-sm hover:shadow-md hover:border-[#03373D] hover:bg-[#EAF8F7] transition-all"
+              id={`category-${cat.name.replace(/\s+/g, "-").toLowerCase()}`}
+              onClick={() =>
+                navigate(
+                  `/all-issues?category=${encodeURIComponent(cat.name)}`
+                )
+              }
+              className="group flex flex-col items-center gap-3 p-5 rounded-xl text-center cursor-pointer"
+              style={{
+                backgroundColor: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
+                boxShadow: "0 2px 8px var(--color-shadow)",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--color-primary)";
+                e.currentTarget.style.backgroundColor = "var(--color-accent-soft)";
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 6px 20px var(--color-shadow)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--color-border)";
+                e.currentTarget.style.backgroundColor = "var(--color-surface)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 2px 8px var(--color-shadow)";
+              }}
             >
-              <span className="text-4xl group-hover:scale-110 transition-transform">
+              <span className="text-4xl group-hover:scale-110 transition-transform duration-200">
                 {cat.icon}
               </span>
-              <p className="font-bold text-[#03373D] text-center text-sm">{cat.name}</p>
-              <div className="badge bg-[#03373D] text-white border-none">
+              <p
+                className="font-bold text-sm"
+                style={{ color: "var(--color-text-heading)" }}
+              >
+                {cat.name}
+              </p>
+              <span
+                className="cs-badge cs-badge--primary"
+                style={{ fontSize: "0.7rem" }}
+              >
                 {count} {count === 1 ? "issue" : "issues"}
-              </div>
-            </div>
+              </span>
+            </button>
           );
         })}
       </div>

@@ -22,33 +22,24 @@ const STATUS_OPTIONS = [
 
 const AdminAllIssues = () => {
   const { user } = useAuth();
-
   const queryClient = useQueryClient();
 
   const [filter, setFilter] = useState("All");
   const [page, setPage] = useState(1);
-
   const limit = 10;
 
   const { data, isLoading } = useQuery({
     queryKey: ["adminIssues", filter, page],
-
     queryFn: async () => {
       const params = { page, limit };
-
-      if (filter !== "All") {
-        params.status = filter;
-      }
-
+      if (filter !== "All") params.status = filter;
       const res = await axiosSecure.get("/issues", { params });
-
       return res.data;
     },
   });
 
   const { data: staffList = [] } = useQuery({
     queryKey: ["staffList"],
-
     queryFn: async () => {
       const res = await axiosSecure.get("/users?role=staff");
       return res.data;
@@ -56,37 +47,24 @@ const AdminAllIssues = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, updates }) =>
-      axiosSecure.patch(`/issues/${id}`, updates),
-
+    mutationFn: ({ id, updates }) => axiosSecure.patch(`/issues/${id}`, updates),
     onSuccess: () => {
       toast.success("Issue updated!");
-      queryClient.invalidateQueries({
-        queryKey: ["adminIssues"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["adminIssues"] });
     },
-
-    onError: () => {
-      toast.error("Update failed");
-    },
+    onError: () => toast.error("Update failed"),
   });
 
   const handleStatusChange = (id, status) => {
     updateMutation.mutate({
       id,
-
       updates: {
         status,
-
         timelineEntry: {
           status: status.charAt(0).toUpperCase() + status.slice(1),
-
           message: `Status changed to ${status} by admin`,
-
           updatedBy: user.email,
-
           role: "admin",
-
           date: new Date(),
         },
       },
@@ -95,29 +73,18 @@ const AdminAllIssues = () => {
 
   const handleAssignStaff = (id, staffEmail) => {
     const staff = staffList.find((s) => s.email === staffEmail);
-
     if (!staff) return;
 
     updateMutation.mutate({
       id,
-
       updates: {
-        assignedStaff: {
-          name: staff.name,
-          email: staff.email,
-        },
-
+        assignedStaff: { name: staff.name, email: staff.email },
         status: "in-progress",
-
         timelineEntry: {
           status: "Assigned",
-
           message: `Issue assigned to ${staff.name}`,
-
           updatedBy: user.email,
-
           role: "admin",
-
           date: new Date(),
         },
       },
@@ -125,19 +92,15 @@ const AdminAllIssues = () => {
   };
 
   const issues = data?.result || [];
-
-  const totalPages = data
-    ? Math.ceil(data.total / limit)
-    : 1;
+  const totalPages = data ? Math.ceil(data.total / limit) : 1;
 
   return (
     <div className="w-full overflow-x-hidden">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-[#03373D]">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
           All Issues
         </h1>
-
         <span className="badge badge-lg badge-ghost w-fit">
           {data?.total || 0} total
         </span>
@@ -154,10 +117,13 @@ const AdminAllIssues = () => {
                 setPage(1);
               }}
               className={`btn btn-sm rounded-xl capitalize whitespace-nowrap ${
-                filter === s
-                  ? "bg-[#03373D] text-white border-none"
-                  : "btn-outline"
+                filter === s ? "" : "btn-outline"
               }`}
+              style={{
+                backgroundColor: filter === s ? "var(--color-primary)" : "transparent",
+                color: filter === s ? "var(--color-bg)" : "var(--color-text-body)",
+                borderColor: filter === s ? "transparent" : "var(--color-border)",
+              }}
             >
               {s}
             </button>
@@ -167,7 +133,7 @@ const AdminAllIssues = () => {
 
       {isLoading ? (
         <div className="flex justify-center py-20">
-          <span className="loading loading-spinner loading-lg text-[#03373D]" />
+          <span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} />
         </div>
       ) : (
         <>
@@ -176,10 +142,10 @@ const AdminAllIssues = () => {
           {/* ========================= */}
 
           <div className="hidden lg:block">
-            <div className="overflow-x-auto bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div className="overflow-x-auto cs-surface">
               <table className="table">
                 <thead>
-                  <tr className="bg-[#EAF8F7] text-[#03373D]">
+                  <tr style={{ backgroundColor: "var(--color-surface-hover)", color: "var(--color-text-heading)" }}>
                     <th>Issue</th>
                     <th>Reported By</th>
                     <th>Category</th>
@@ -191,9 +157,9 @@ const AdminAllIssues = () => {
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody style={{ color: "var(--color-text-body)" }}>
                   {issues.map((issue) => (
-                    <tr key={issue._id}>
+                    <tr key={issue._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
                       <td>
                         <div className="flex items-center gap-3">
                           <img
@@ -201,18 +167,17 @@ const AdminAllIssues = () => {
                             alt=""
                             className="w-10 h-10 rounded-lg object-cover"
                           />
-
                           <p className="font-medium max-w-[180px] truncate">
                             {issue.title}
                           </p>
                         </div>
                       </td>
 
-                      <td className="max-w-[180px] truncate">
+                      <td className="max-w-[180px] truncate text-xs">
                         {issue.userEmail}
                       </td>
 
-                      <td>{issue.category}</td>
+                      <td className="text-xs">{issue.category}</td>
 
                       <td>
                         <span
@@ -240,12 +205,9 @@ const AdminAllIssues = () => {
                         <select
                           defaultValue={issue.status}
                           onChange={(e) =>
-                            handleStatusChange(
-                              issue._id,
-                              e.target.value
-                            )
+                            handleStatusChange(issue._id, e.target.value)
                           }
-                          className="select select-sm select-bordered rounded-xl"
+                          className="select select-sm select-bordered rounded-xl cs-input"
                         >
                           {STATUS_OPTIONS.map((s) => (
                             <option key={s} value={s}>
@@ -257,26 +219,18 @@ const AdminAllIssues = () => {
 
                       <td>
                         <select
-                          defaultValue={
-                            issue.assignedStaff?.email || ""
-                          }
+                          defaultValue={issue.assignedStaff?.email || ""}
                           onChange={(e) =>
-                            handleAssignStaff(
-                              issue._id,
-                              e.target.value
-                            )
+                            handleAssignStaff(issue._id, e.target.value)
                           }
-                          className="select select-sm select-bordered rounded-xl"
+                          className="select select-sm select-bordered rounded-xl cs-input"
                         >
                           <option value="" disabled>
                             Assign
                           </option>
 
                           {staffList.map((s) => (
-                            <option
-                              key={s.email}
-                              value={s.email}
-                            >
+                            <option key={s.email} value={s.email}>
                               {s.name}
                             </option>
                           ))}
@@ -306,7 +260,7 @@ const AdminAllIssues = () => {
               {issues.map((issue) => (
                 <div
                   key={issue._id}
-                  className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4"
+                  className="cs-surface p-4"
                 >
                   {/* TOP */}
                   <div className="flex gap-3">
@@ -318,7 +272,7 @@ const AdminAllIssues = () => {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h2 className="font-semibold text-sm text-[#03373D] break-words leading-tight">
+                        <h2 className="font-semibold text-sm break-words leading-tight" style={{ color: "var(--color-text-heading)" }}>
                           {issue.title}
                         </h2>
 
@@ -329,7 +283,7 @@ const AdminAllIssues = () => {
                         </Link>
                       </div>
 
-                      <p className="text-xs text-gray-400 break-all mt-1">
+                      <p className="text-xs break-all mt-1" style={{ color: "var(--color-text-muted)" }}>
                         {issue.userEmail}
                       </p>
 
@@ -362,19 +316,16 @@ const AdminAllIssues = () => {
                   {/* CONTROLS */}
                   <div className="mt-4 space-y-3">
                     <div>
-                      <p className="text-[11px] font-medium text-gray-400 uppercase mb-1">
+                      <p className="text-[11px] font-medium uppercase mb-1" style={{ color: "var(--color-text-muted)" }}>
                         Change Status
                       </p>
 
                       <select
                         defaultValue={issue.status}
                         onChange={(e) =>
-                          handleStatusChange(
-                            issue._id,
-                            e.target.value
-                          )
+                          handleStatusChange(issue._id, e.target.value)
                         }
-                        className="select select-sm select-bordered rounded-xl w-full"
+                        className="select select-sm select-bordered rounded-xl w-full cs-input"
                       >
                         {STATUS_OPTIONS.map((s) => (
                           <option key={s} value={s}>
@@ -385,31 +336,23 @@ const AdminAllIssues = () => {
                     </div>
 
                     <div>
-                      <p className="text-[11px] font-medium text-gray-400 uppercase mb-1">
+                      <p className="text-[11px] font-medium uppercase mb-1" style={{ color: "var(--color-text-muted)" }}>
                         Assign Staff
                       </p>
 
                       <select
-                        defaultValue={
-                          issue.assignedStaff?.email || ""
-                        }
+                        defaultValue={issue.assignedStaff?.email || ""}
                         onChange={(e) =>
-                          handleAssignStaff(
-                            issue._id,
-                            e.target.value
-                          )
+                          handleAssignStaff(issue._id, e.target.value)
                         }
-                        className="select select-sm select-bordered rounded-xl w-full"
+                        className="select select-sm select-bordered rounded-xl w-full cs-input"
                       >
                         <option value="" disabled>
                           Assign Staff
                         </option>
 
                         {staffList.map((s) => (
-                          <option
-                            key={s.email}
-                            value={s.email}
-                          >
+                          <option key={s.email} value={s.email}>
                             {s.name}
                           </option>
                         ))}
@@ -427,40 +370,34 @@ const AdminAllIssues = () => {
       {totalPages > 1 && (
         <div className="flex flex-wrap justify-center gap-2 mt-8">
           <button
-            onClick={() =>
-              setPage((p) => Math.max(p - 1, 1))
-            }
+            onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={page === 1}
             className="btn btn-sm btn-outline rounded-xl"
+            style={{ color: "var(--color-primary)", borderColor: "var(--color-primary)" }}
           >
             Prev
           </button>
 
-          {Array.from(
-            { length: totalPages },
-            (_, i) => i + 1
-          ).map((p) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`btn btn-sm rounded-xl min-w-[40px] ${
-                p === page
-                  ? "bg-[#03373D] text-white border-none"
-                  : "btn-outline"
-              }`}
+              className={`btn btn-sm rounded-xl min-w-[40px] ${p === page ? "" : "btn-outline"}`}
+              style={{
+                backgroundColor: p === page ? "var(--color-primary)" : "transparent",
+                color: p === page ? "var(--color-bg)" : "var(--color-primary)",
+                borderColor: p === page ? "transparent" : "var(--color-primary)",
+              }}
             >
               {p}
             </button>
           ))}
 
           <button
-            onClick={() =>
-              setPage((p) =>
-                Math.min(p + 1, totalPages)
-              )
-            }
+            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
             disabled={page === totalPages}
             className="btn btn-sm btn-outline rounded-xl"
+            style={{ color: "var(--color-primary)", borderColor: "var(--color-primary)" }}
           >
             Next
           </button>

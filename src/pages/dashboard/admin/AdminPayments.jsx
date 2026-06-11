@@ -12,33 +12,12 @@ import { Download } from "lucide-react";
 
 
 const styles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 12,
-  },
-
-  title: {
-    fontSize: 22,
-    marginBottom: 20,
-    fontWeight: "bold",
-  },
-
-  section: {
-    marginBottom: 10,
-  },
-
-  label: {
-    fontWeight: "bold",
-  },
-
-  amount: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+  page: { padding: 30, fontSize: 12 },
+  title: { fontSize: 22, marginBottom: 20, fontWeight: "bold" },
+  section: { marginBottom: 10 },
+  label: { fontWeight: "bold" },
+  amount: { marginTop: 20, fontSize: 18, fontWeight: "bold" },
 });
-
-
 
 const InvoicePDF = ({ payment }) => (
   <Document>
@@ -87,11 +66,9 @@ const InvoicePDF = ({ payment }) => (
   </Document>
 );
 
-
 const AdminPayments = () => {
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ["allPayments"],
-
     queryFn: async () => {
       const res = await axiosSecure.get("/payments");
       return res.data;
@@ -107,11 +84,11 @@ const AdminPayments = () => {
     <div className="w-full overflow-x-hidden">
    
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-[#03373D]">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
           Payments
         </h1>
 
-        <div className="badge badge-lg bg-[#03373D] text-white p-4 w-fit">
+        <div className="badge badge-lg p-4 w-fit" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
           Total Revenue: ৳{total}
         </div>
       </div>
@@ -119,10 +96,10 @@ const AdminPayments = () => {
      
       {isLoading ? (
         <div className="flex justify-center py-20">
-          <span className="loading loading-spinner loading-lg text-[#03373D]" />
+          <span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} />
         </div>
       ) : payments.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100 text-gray-400">
+        <div className="text-center py-16 cs-surface text-gray-400">
           No payments yet.
         </div>
       ) : (
@@ -132,10 +109,10 @@ const AdminPayments = () => {
          
 
           <div className="hidden lg:block">
-            <div className="overflow-x-auto bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div className="overflow-x-auto cs-surface">
               <table className="table">
                 <thead>
-                  <tr className="bg-[#EAF8F7] text-[#03373D]">
+                  <tr style={{ backgroundColor: "var(--color-surface-hover)", color: "var(--color-text-heading)" }}>
                     <th>Transaction ID</th>
                     <th>User</th>
                     <th>Type</th>
@@ -146,14 +123,14 @@ const AdminPayments = () => {
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody style={{ color: "var(--color-text-body)" }}>
                   {payments.map((p) => (
-                    <tr key={p._id} className="hover">
-                      <td className="text-xs text-gray-400 font-mono max-w-[140px] truncate">
+                    <tr key={p._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
+                      <td className="text-xs font-mono max-w-[140px] truncate" style={{ color: "var(--color-text-muted)" }}>
                         {p.transactionId}
                       </td>
 
-                      <td className="text-xs text-gray-600 max-w-[180px] truncate">
+                      <td className="text-xs max-w-[180px] truncate" style={{ color: "var(--color-text-body)" }}>
                         {p.userEmail}
                       </td>
 
@@ -169,18 +146,16 @@ const AdminPayments = () => {
                         </span>
                       </td>
 
-                      <td className="text-xs text-gray-500 max-w-[180px] truncate">
+                      <td className="text-xs max-w-[180px] truncate" style={{ color: "var(--color-text-muted)" }}>
                         {p.issueTitle || "—"}
                       </td>
 
-                      <td className="font-bold text-[#03373D]">
+                      <td className="font-bold" style={{ color: "var(--color-text-heading)" }}>
                         ৳{p.amount}
                       </td>
 
-                      <td className="text-xs text-gray-400">
-                        {new Date(
-                          p.createdAt
-                        ).toLocaleDateString()}
+                      <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                        {new Date(p.createdAt).toLocaleDateString()}
                       </td>
 
                       <td>
@@ -189,12 +164,9 @@ const AdminPayments = () => {
                           fileName={`invoice-${p.transactionId}.pdf`}
                         >
                           {({ loading }) => (
-                            <button className="btn btn-sm px-2 rounded-xl bg-[#03373D] text-white border-none">
+                            <button className="btn btn-sm px-2 rounded-xl border-none" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                               <Download size={16} />
-
-                              {loading
-                                ? "Generating..."
-                                : "Invoice"}
+                              {loading ? "Generating..." : "Invoice"}
                             </button>
                           )}
                         </PDFDownloadLink>
@@ -215,26 +187,26 @@ const AdminPayments = () => {
               {payments.map((p) => (
                 <div
                   key={p._id}
-                  className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4"
+                  className="cs-surface p-4"
                 >
                   {/* TOP */}
                   <div className="space-y-3">
                     <div>
-                      <p className="text-[11px] uppercase text-gray-400 font-medium mb-1">
+                      <p className="text-[11px] uppercase font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
                         Transaction ID
                       </p>
 
-                      <p className="text-xs font-mono break-all text-gray-500">
+                      <p className="text-xs font-mono break-all" style={{ color: "var(--color-text-body)" }}>
                         {p.transactionId}
                       </p>
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase text-gray-400 font-medium mb-1">
+                      <p className="text-[11px] uppercase font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
                         User
                       </p>
 
-                      <p className="text-sm break-all text-[#03373D]">
+                      <p className="text-sm break-all" style={{ color: "var(--color-text-heading)" }}>
                         {p.userEmail}
                       </p>
                     </div>
@@ -256,24 +228,22 @@ const AdminPayments = () => {
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase text-gray-400 font-medium mb-1">
+                      <p className="text-[11px] uppercase font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
                         Issue
                       </p>
 
-                      <p className="text-sm text-gray-600 break-words">
+                      <p className="text-sm break-words" style={{ color: "var(--color-text-body)" }}>
                         {p.issueTitle || "N/A"}
                       </p>
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase text-gray-400 font-medium mb-1">
+                      <p className="text-[11px] uppercase font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
                         Date
                       </p>
 
-                      <p className="text-sm text-gray-500">
-                        {new Date(
-                          p.createdAt
-                        ).toLocaleDateString()}
+                      <p className="text-sm" style={{ color: "var(--color-text-body)" }}>
+                        {new Date(p.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -286,12 +256,9 @@ const AdminPayments = () => {
                       className="w-full"
                     >
                       {({ loading }) => (
-                        <button className="btn w-full rounded-xl bg-[#03373D] text-white border-none">
+                        <button className="btn w-full rounded-xl border-none" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                           <Download size={18} />
-
-                          {loading
-                            ? "Generating Invoice..."
-                            : "Download Invoice"}
+                          {loading ? "Generating Invoice..." : "Download Invoice"}
                         </button>
                       )}
                     </PDFDownloadLink>

@@ -1,11 +1,409 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — LIGHT MODE (default)
+═══════════════════════════════════════════ */
+:root {
+  --color-bg:              #FFF4E1;
+  --color-surface:         #ffffff;
+  --color-surface-hover:   #f5ede0;
+  --color-primary:         #1A312C;
+  --color-primary-hover:   #428475;
+  --color-accent:          #89D7B7;
+  --color-accent-soft:     #d4f2e7;
+  --color-text-heading:    #1A312C;
+  --color-text-body:       #2e4d46;
+  --color-text-muted:      #688c84;
+  --color-border:          #d4ede3;
+  --color-shadow:          rgba(26, 49, 44, 0.10);
+  --color-gradient-from:   #e8f8f3;
+  --color-gradient-to:     #d4ede3;
+  --color-card-badge-bg:   #1A312C;
+  --color-card-badge-text: #FFF4E1;
+
+  /* spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+
+  /* radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-h1: 700 2.25rem/1.2 var(--font-family);
+  --font-h2: 700 1.75rem/1.25 var(--font-family);
+  --font-h3: 600 1.375rem/1.3 var(--font-family);
+  --font-h4: 600 1.125rem/1.4 var(--font-family);
+  --font-body: 400 1rem/1.6 var(--font-family);
+  --font-small: 400 0.875rem/1.5 var(--font-family);
+}
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — DARK MODE
+═══════════════════════════════════════════ */
+[data-theme="dark"] {
+  --color-bg:              #0d1f1a;
+  --color-surface:         #1A312C;
+  --color-surface-hover:   #243d36;
+  --color-primary:         #89D7B7;
+  --color-primary-hover:   #a3e6ca;
+  --color-accent:          #FFF4E1;
+  --color-accent-soft:     rgba(137, 215, 183, 0.15);
+  --color-text-heading:    #FFF4E1;
+  --color-text-body:       #c8ddd7;
+  --color-text-muted:      #89D7B7;
+  --color-border:          #2e4d46;
+  --color-shadow:          rgba(0, 0, 0, 0.35);
+  --color-gradient-from:   #1A312C;
+  --color-gradient-to:     #243d36;
+  --color-card-badge-bg:   #89D7B7;
+  --color-card-badge-text: #1A312C;
+}
+
+/* ═══════════════════════════════════════════
+   GLOBAL RESET & BASE
+═══════════════════════════════════════════ */
 html,
 body,
 #root {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  font: var(--font-body);
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY SCALE
+═══════════════════════════════════════════ */
+.cs-h1 {
+  font: var(--font-h1);
+  color: var(--color-text-heading);
+  letter-spacing: -0.02em;
+}
+.cs-h2 {
+  font: var(--font-h2);
+  color: var(--color-text-heading);
+  letter-spacing: -0.015em;
+}
+.cs-h3 {
+  font: var(--font-h3);
+  color: var(--color-text-heading);
+}
+.cs-h4 {
+  font: var(--font-h4);
+  color: var(--color-text-heading);
+}
+.cs-body {
+  font: var(--font-body);
+  color: var(--color-text-body);
+}
+.cs-muted {
+  font: var(--font-small);
+  color: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   SHARED COMPONENT STYLES
+═══════════════════════════════════════════ */
+
+/* Theme-aware surface card */
+.cs-surface {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 2px 12px var(--color-shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cs-surface:hover {
+  box-shadow: 0 6px 24px var(--color-shadow);
+}
+
+/* Primary button */
+.cs-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 8px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+}
+
+.cs-btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Outline button */
+.cs-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+}
+
+.cs-btn-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  transform: translateY(-1px);
+}
+
+/* Feature gradient section */
+.cs-feature-gradient {
+  background: linear-gradient(135deg, var(--color-gradient-from), var(--color-gradient-to));
+  border-radius: var(--radius-xl);
+  transition: background 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════
+   SKELETON LOADER
+═══════════════════════════════════════════ */
+@keyframes cs-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.cs-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-surface-hover) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 800px 100%;
+  animation: cs-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+.cs-skeleton-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════
+   ISSUE CARD — Unified
+═══════════════════════════════════════════ */
+.cs-issue-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 2px 10px var(--color-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+}
+
+.cs-issue-card:hover {
+  box-shadow: 0 8px 28px var(--color-shadow);
+  transform: translateY(-3px);
+  border-color: var(--color-accent);
+}
+
+.cs-issue-card__image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cs-issue-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  gap: 8px;
+}
+
+.cs-issue-card__title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--color-text-heading);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cs-issue-card__description {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.cs-issue-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.cs-issue-card__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cs-issue-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Badge */
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+.cs-badge--resolved  { background: #dcfce7; color: #166534; }
+.cs-badge--pending   { background: #fef9c3; color: #854d0e; }
+.cs-badge--progress  { background: #dbeafe; color: #1d4ed8; }
+.cs-badge--rejected  { background: #fee2e2; color: #991b1b; }
+.cs-badge--boosted   { background: #fef3c7; color: #92400e; }
+.cs-badge--primary   { background: var(--color-primary); color: var(--color-bg); }
+
+[data-theme="dark"] .cs-badge--resolved  { background: rgba(22, 101, 52, 0.35); color: #86efac; }
+[data-theme="dark"] .cs-badge--pending   { background: rgba(133, 77, 14, 0.35); color: #fde68a; }
+[data-theme="dark"] .cs-badge--progress  { background: rgba(29, 78, 216, 0.30); color: #93c5fd; }
+[data-theme="dark"] .cs-badge--rejected  { background: rgba(153, 27, 27, 0.35); color: #fca5a5; }
+[data-theme="dark"] .cs-badge--boosted   { background: rgba(146, 64, 14, 0.35); color: #fcd34d; }
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.cs-navbar {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cs-nav-link {
+  color: var(--color-text-body);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  transition: background-color 0.2s, color 0.2s;
+  text-decoration: none;
+}
+
+.cs-nav-link:hover,
+.cs-nav-link.active {
+  background-color: var(--color-accent-soft);
+  color: var(--color-primary);
+}
+
+/* Theme toggle button */
+.cs-theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cs-theme-toggle:hover {
+  background-color: var(--color-accent);
+  transform: rotate(20deg) scale(1.1);
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+.cs-footer {
+  background-color: var(--color-primary);
+  color: var(--color-accent-soft);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .cs-footer {
+  background-color: #0a1812;
+}
+
+/* ═══════════════════════════════════════════
+   FORM INPUTS (DaisyUI override)
+═══════════════════════════════════════════ */
+.cs-input {
+  background-color: var(--color-surface) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-body) !important;
+  border-radius: var(--radius-md) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cs-input:focus {
+  border-color: var(--color-accent) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(137, 215, 183, 0.25);
+}
+
+/* ═══════════════════════════════════════════
+   SMOOTH TRANSITIONS
+═══════════════════════════════════════════ */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+}
+
+/* Don't transition transforms etc. globally — only above */

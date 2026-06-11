@@ -36,8 +36,8 @@ const Subscription = () => {
     return (
       <div className="max-w-md mx-auto text-center py-16">
         <Crown size={64} className="text-yellow-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-[#03373D]">You're already Premium!</h2>
-        <p className="text-gray-500 mt-2">Enjoy unlimited issue submissions and priority support.</p>
+        <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>You're already Premium!</h2>
+        <p className="mt-2" style={{ color: "var(--color-text-muted)" }}>Enjoy unlimited issue submissions and priority support.</p>
       </div>
     );
   }
@@ -46,12 +46,12 @@ const Subscription = () => {
     <div className="max-w-lg mx-auto">
       <div className="text-center mb-8">
         <Crown size={48} className="text-yellow-500 mx-auto mb-3" />
-        <h1 className="text-3xl font-bold text-[#03373D]">Go Premium</h1>
-        <p className="text-gray-500 mt-2">Unlock unlimited issue submissions and more.</p>
+        <h1 className="text-3xl font-bold" style={{ color: "var(--color-text-heading)" }}>Go Premium</h1>
+        <p className="mt-2" style={{ color: "var(--color-text-muted)" }}>Unlock unlimited issue submissions and more.</p>
       </div>
 
-      <div className="bg-gradient-to-br from-[#EAF8F7] to-white rounded-2xl p-6 mb-6 border border-[#03373D]/10">
-        <h2 className="font-bold text-[#03373D] mb-4 text-lg">Premium Benefits</h2>
+      <div className="cs-feature-gradient rounded-2xl p-6 mb-6">
+        <h2 className="font-bold mb-4 text-lg" style={{ color: "var(--color-text-heading)" }}>Premium Benefits</h2>
         {[
           "Unlimited issue submissions (free = 3 max)",
           "Priority customer support",
@@ -60,29 +60,29 @@ const Subscription = () => {
         ].map((b) => (
           <div key={b} className="flex items-center gap-2 mb-2">
             <CheckCircle size={16} className="text-green-500 shrink-0" />
-            <span className="text-gray-700 text-sm">{b}</span>
+            <span className="text-sm" style={{ color: "var(--color-text-body)" }}>{b}</span>
           </div>
         ))}
-        <div className="divider" />
-        <p className="text-3xl font-extrabold text-[#03373D] text-center">
-          ৳500 <span className="text-base font-normal text-gray-400">/ one-time</span>
+        <div className="divider" style={{ opacity: 0.2 }} />
+        <p className="text-3xl font-extrabold text-center" style={{ color: "var(--color-text-heading)" }}>
+          ৳500 <span className="text-base font-normal" style={{ color: "var(--color-text-muted)" }}>/ one-time</span>
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="font-bold text-[#03373D] mb-4">Secure checkout</h3>
-        <p className="text-sm text-gray-500 mb-4">
+      <div className="cs-surface p-6">
+        <h3 className="font-bold mb-4" style={{ color: "var(--color-text-heading)" }}>Secure checkout</h3>
+        <p className="text-sm mb-4" style={{ color: "var(--color-text-muted)" }}>
           You will be redirected to Stripe&apos;s hosted checkout page to complete payment.
         </p>
         <button
           type="button"
           onClick={handleCheckout}
           disabled={processing}
-          className="btn px-2 bg-[#03373D] hover:bg-[#05535D] text-white border-none w-full rounded-xl text-lg font-semibold"
+          className="cs-btn-primary w-full py-3 text-lg"
         >
           {processing ? <span className="loading loading-spinner loading-sm" /> : "Pay & Upgrade via Stripe"}
         </button>
-        <p className="text-xs text-gray-400 text-center mt-3">Payments are secure and encrypted via Stripe.</p>
+        <p className="text-xs text-center mt-3" style={{ color: "var(--color-text-muted)" }}>Payments are secure and encrypted via Stripe.</p>
       </div>
     </div>
   );

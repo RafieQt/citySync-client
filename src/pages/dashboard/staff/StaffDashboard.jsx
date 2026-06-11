@@ -63,21 +63,21 @@ const StaffDashboard = () => {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#03373D]">Staff Dashboard</h1>
-        <p className="text-gray-500 mt-1">Manage your assigned issues.</p>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>Staff Dashboard</h1>
+        <p className="mt-1" style={{ color: "var(--color-text-muted)" }}>Manage your assigned issues.</p>
       </div>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 gap-4 mb-8 max-w-sm">
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col items-center gap-2 border border-gray-100">
+        <div className="cs-surface p-4 flex flex-col items-center gap-2">
           <div className="p-2 rounded-xl bg-blue-50 text-blue-600"><ClipboardList size={22} /></div>
-          <p className="text-2xl font-bold text-[#03373D]">{stats?.assigned || 0}</p>
-          <p className="text-xs text-gray-500">Total Assigned</p>
+          <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>{stats?.assigned || 0}</p>
+          <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Total Assigned</p>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col items-center gap-2 border border-gray-100">
+        <div className="cs-surface p-4 flex flex-col items-center gap-2">
           <div className="p-2 rounded-xl bg-green-50 text-green-600"><CheckCircle size={22} /></div>
-          <p className="text-2xl font-bold text-[#03373D]">{stats?.resolved || 0}</p>
-          <p className="text-xs text-gray-500">Resolved</p>
+          <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>{stats?.resolved || 0}</p>
+          <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Resolved</p>
         </div>
       </div>
 
@@ -87,7 +87,12 @@ const StaffDashboard = () => {
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`btn px-2 btn-sm rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
+            className={`btn px-2 btn-sm rounded-xl capitalize ${filter === s ? "" : "btn-outline"}`}
+            style={{
+              backgroundColor: filter === s ? "var(--color-primary)" : "transparent",
+              color: filter === s ? "var(--color-bg)" : "var(--color-text-body)",
+              borderColor: filter === s ? "transparent" : "var(--color-border)",
+            }}
           >
             {s}
           </button>
@@ -96,16 +101,16 @@ const StaffDashboard = () => {
 
       {/* Issues Table */}
       {isLoading ? (
-        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>
+        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} /></div>
       ) : issues.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100 text-gray-400">
+        <div className="text-center py-16 cs-surface text-gray-400">
           No assigned issues.
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div className="cs-surface overflow-x-auto">
           <table className="table">
             <thead>
-              <tr className="text-[#03373D] bg-[#EAF8F7]">
+              <tr style={{ color: "var(--color-text-heading)", backgroundColor: "var(--color-surface-hover)" }}>
                 <th>Issue</th>
                 <th>Category</th>
                 <th>Location</th>
@@ -115,17 +120,17 @@ const StaffDashboard = () => {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ color: "var(--color-text-body)" }}>
               {issues.map((issue) => (
-                <tr key={issue._id} className="hover">
+                <tr key={issue._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
                   <td>
                     <div className="flex items-center gap-3">
                       <img src={issue.image} className="w-10 h-10 rounded-lg object-cover" alt="" />
                       <p className="font-medium text-sm max-w-[140px] truncate">{issue.title}</p>
                     </div>
                   </td>
-                  <td className="text-xs text-gray-500">{issue.category}</td>
-                  <td className="text-xs text-gray-500 max-w-[100px] truncate">{issue.location}</td>
+                  <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{issue.category}</td>
+                  <td className="text-xs max-w-[100px] truncate" style={{ color: "var(--color-text-muted)" }}>{issue.location}</td>
                   <td>
                     <span className={`badge badge-sm capitalize ${issue.priority === "high" ? "badge-error text-white" : "badge-ghost"}`}>
                       {issue.priority}
@@ -136,14 +141,14 @@ const StaffDashboard = () => {
                     <select
                       defaultValue={issue.status}
                       onChange={(e) => updateStatusMutation.mutate({ id: issue._id, status: e.target.value })}
-                      className="select select-xs select-bordered rounded-lg"
+                      className="select select-xs select-bordered rounded-lg cs-input"
                     >
                       {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </td>
                   <td>
                     <Link to={`/issues/${issue._id}`}>
-                      <button className="btn px-2 btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
+                      <button className="cs-btn-outline" style={{ padding: "2px 8px", fontSize: "0.75rem", borderRadius: "8px" }}><Eye size={14} /></button>
                     </Link>
                   </td>
                 </tr>

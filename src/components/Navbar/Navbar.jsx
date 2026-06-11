@@ -1,13 +1,15 @@
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
-import Logo from "../ErrorPage/logo/Logo";
-import face from '../../assets/animation/face.png';
+import face from "../../assets/animation/face.png";
 import toast from "react-hot-toast";
+import { HeartHandshake, Sun, Moon, Menu } from "lucide-react";
+import { useTheme } from "../../Contexts/ThemeContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { dbUser } = useUser();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     logout()
@@ -18,12 +20,22 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <NavLink to="/all-issues" className={({ isActive }) => isActive ? "font-bold text-[#03373D]" : ""}>
+        <NavLink
+          to="/all-issues"
+          className={({ isActive }) =>
+            `cs-nav-link${isActive ? " active" : ""}`
+          }
+        >
           All Issues
         </NavLink>
       </li>
       <li>
-        <NavLink to="/submitIssue" className={({ isActive }) => isActive ? "font-bold text-[#03373D]" : ""}>
+        <NavLink
+          to="/submitIssue"
+          className={({ isActive }) =>
+            `cs-nav-link${isActive ? " active" : ""}`
+          }
+        >
           Report Issue
         </NavLink>
       </li>
@@ -31,63 +43,142 @@ const Navbar = () => {
   );
 
   return (
-    <div className="max-w-7xl flex flex-col pt-5 mx-auto">
-      <div className="navbar bg-[#EBFFFD] shadow-sm rounded-lg px-6">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
-              </svg>
-            </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
-              {navLinks}
-            </ul>
-          </div>
-          <Logo />
-        </div>
+    <div
+      className="sticky top-0 z-50"
+      style={{
+        backgroundColor: "var(--color-surface)",
+        borderBottom: "1px solid var(--color-border)",
+        transition: "background-color 0.3s ease, border-color 0.3s ease",
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16 gap-4">
 
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 gap-1">
+          {/* Logo */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-bold text-lg shrink-0"
+            style={{ color: "var(--color-text-heading)" }}
+          >
+            <span
+              className="flex items-center justify-center w-8 h-8 rounded-lg"
+              style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
+            >
+              <HeartHandshake size={18} />
+            </span>
+            CitySync
+          </Link>
+
+          {/* Desktop Nav Links */}
+          <ul className="hidden lg:flex items-center gap-1 list-none m-0 p-0">
             {navLinks}
           </ul>
-        </div>
 
-        <div className="navbar-end">
-          {user ? (
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full ring ring-[#03373D] ring-offset-1">
-                  <img
-                    alt={user.displayName}
-                    src={user.photoURL || face}
-                    onError={(e) => { e.target.src = face; }}
-                  />
+          {/* Right Controls */}
+          <div className="flex items-center gap-2">
+
+            {/* Theme Toggle */}
+            <button
+              id="theme-toggle-btn"
+              onClick={toggleTheme}
+              className="cs-theme-toggle"
+              aria-label="Toggle theme"
+              title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+            >
+              {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+
+            {/* Auth Section */}
+            {user ? (
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div
+                    className="w-9 rounded-full"
+                    style={{ ring: "2px solid var(--color-accent)" }}
+                  >
+                    <img
+                      alt={user.displayName}
+                      src={user.photoURL || face}
+                      onError={(e) => { e.target.src = face; }}
+                      className="rounded-full w-9 h-9 object-cover ring-2"
+                      style={{ ringColor: "var(--color-accent)" }}
+                    />
+                  </div>
                 </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content rounded-xl z-50 mt-2 w-56 p-2 shadow-lg"
+                  style={{
+                    backgroundColor: "var(--color-surface)",
+                    border: "1px solid var(--color-border)",
+                    color: "var(--color-text-body)",
+                  }}
+                >
+                  <li className="px-3 py-2">
+                    <span className="font-semibold" style={{ color: "var(--color-text-heading)" }}>
+                      {user.displayName || "User"}
+                    </span>
+                    {dbUser?.isPremium && (
+                      <span className="cs-badge cs-badge--boosted ml-1">Premium</span>
+                    )}
+                  </li>
+                  <div style={{ height: 1, backgroundColor: "var(--color-border)", margin: "4px 0" }} />
+                  <li>
+                    <Link
+                      to="/dashboard"
+                      className="cs-nav-link block w-full"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="cs-nav-link w-full text-left"
+                      style={{ color: "#dc2626" }}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
               </div>
-              <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-56 p-2 shadow">
-                <li className="px-2 py-1">
-                  <span className="font-semibold text-[#03373D]">
-                    {user.displayName || "User"}
-                  </span>
-                  {dbUser?.isPremium && (
-                    <span className="badge badge-warning badge-sm ml-1">Premium</span>
-                  )}
-                </li>
-                <div className="divider my-0" />
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li>
-                  <button onClick={handleLogout} className="text-red-500">Logout</button>
-                </li>
+            ) : (
+              <Link to="/signin">
+                <button
+                  id="login-btn"
+                  className="cs-btn-primary"
+                  style={{ fontSize: "0.875rem", padding: "7px 16px" }}
+                >
+                  Login
+                </button>
+              </Link>
+            )}
+
+            {/* Mobile Menu */}
+            <div className="dropdown dropdown-end lg:hidden">
+              <button
+                tabIndex={0}
+                className="cs-theme-toggle"
+                aria-label="Open menu"
+              >
+                <Menu size={18} />
+              </button>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content rounded-xl z-50 mt-2 w-48 p-2 shadow-lg"
+                style={{
+                  backgroundColor: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
+                }}
+              >
+                {navLinks}
               </ul>
             </div>
-          ) : (
-            <Link to="/signin">
-              <button className="btn bg-[#03373D] text-white font-semibold px-5 border-none hover:bg-[#05535D]">
-                Login
-              </button>
-            </Link>
-          )}
+          </div>
         </div>
       </div>
     </div>

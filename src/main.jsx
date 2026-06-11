@@ -6,6 +6,7 @@ import { router } from "./routes/router";
 import AuthProvider from "./Contexts/AuthContexts/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "./Contexts/ThemeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,19 +19,21 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <RouterProvider router={router} />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: { borderRadius: "12px", background: "#03373D", color: "#fff" },
-            success: { style: { background: "#03373D" } },
-            error: { style: { background: "#ef4444" } },
-          }}
-        />
-      </AuthProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: { borderRadius: "12px", background: "#1A312C", color: "#FFF4E1" },
+              success: { style: { background: "#428475" } },
+              error: { style: { background: "#b91c1c" } },
+            }}
+          />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   </StrictMode>
 );

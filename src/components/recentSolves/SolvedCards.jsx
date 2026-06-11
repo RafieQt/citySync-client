@@ -1,59 +1,79 @@
 import { Link } from "react-router";
 import { MapPin, Tag, Calendar, ChevronUp } from "lucide-react";
 
+const statusBadgeClass = {
+  resolved: "cs-badge cs-badge--resolved",
+  pending: "cs-badge cs-badge--pending",
+  "in-progress": "cs-badge cs-badge--progress",
+  rejected: "cs-badge cs-badge--rejected",
+};
+
 const SolvedCards = ({ issue }) => {
   return (
-    <div className="card bg-white shadow-md rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-      <figure className="h-44 overflow-hidden rounded-t-2xl">
+    <article className="cs-issue-card">
+      {/* Image */}
+      <div style={{ height: 180, overflow: "hidden", flexShrink: 0 }}>
         <img
           src={issue.image}
           alt={issue.title}
-          className="w-full h-full object-cover"
+          className="cs-issue-card__image"
+          style={{ height: 180 }}
         />
-      </figure>
-      <div className="card-body p-4">
-        {/* Status badge */}
-        <div className="flex gap-2">
-          <span className="badge badge-success badge-sm">✓ Resolved</span>
+      </div>
+
+      {/* Body */}
+      <div className="cs-issue-card__body">
+        {/* Badges */}
+        <div className="flex gap-2 flex-wrap">
+          <span className="cs-badge cs-badge--resolved">✓ Resolved</span>
           {issue.priority === "high" && (
-            <span className="badge badge-error badge-sm text-white">🔥 Boosted</span>
+            <span className="cs-badge cs-badge--boosted">🔥 Boosted</span>
           )}
         </div>
 
-        <h2 className="card-title text-[#03373D] text-base font-bold leading-tight line-clamp-2 mt-1">
-          {issue.title}
-        </h2>
+        {/* Title */}
+        <h3 className="cs-issue-card__title">{issue.title}</h3>
 
-        <p className="text-gray-500 text-xs line-clamp-2">{issue.description}</p>
+        {/* Description */}
+        <p className="cs-issue-card__description">{issue.description}</p>
 
-        <div className="flex flex-col gap-1 mt-2">
-          <div className="flex items-center gap-1 text-gray-400 text-xs">
-            <Tag size={12} />
+        {/* Meta */}
+        <div className="cs-issue-card__meta">
+          <div className="cs-issue-card__meta-row">
+            <Tag size={11} />
             <span>{issue.category}</span>
           </div>
-          <div className="flex items-center gap-1 text-gray-400 text-xs">
-            <MapPin size={12} />
-            <span className="line-clamp-1">{issue.location}</span>
+          <div className="cs-issue-card__meta-row">
+            <MapPin size={11} />
+            <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+              {issue.location}
+            </span>
           </div>
-          <div className="flex items-center gap-1 text-gray-400 text-xs">
-            <Calendar size={12} />
-            <span>{new Date(issue.updatedAt || issue.createdAt).toLocaleDateString()}</span>
+          <div className="cs-issue-card__meta-row">
+            <Calendar size={11} />
+            <span>
+              {new Date(issue.updatedAt || issue.createdAt).toLocaleDateString()}
+            </span>
           </div>
         </div>
 
-        <div className="card-actions justify-between items-center mt-3">
-          <div className="flex items-center gap-1 text-[#03373D] font-semibold text-sm">
+        {/* Actions */}
+        <div className="cs-issue-card__actions">
+          <div
+            className="flex items-center gap-1 text-sm font-semibold"
+            style={{ color: "var(--color-primary)" }}
+          >
             <ChevronUp size={15} />
             <span>{issue.upvotes?.length || 0}</span>
           </div>
           <Link to={`/issues/${issue._id}`}>
-            <button className="btn btn-sm px-2 bg-[#03373D] text-white border-none rounded-xl hover:bg-[#05535D]">
+            <button id={`view-details-${issue._id}`} className="cs-btn-primary" style={{ fontSize: "0.8rem", padding: "6px 14px" }}>
               View Details
             </button>
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -6,19 +6,24 @@ const LottieComponent = Lottie?.default || Lottie;
 const EasyReport = () => {
   return (
     <div className="w-full overflow-hidden">
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-8 bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] rounded-2xl px-5 sm:px-8 py-8 sm:py-10">
-        
+      <div
+        className="flex flex-col-reverse lg:flex-row items-center justify-between gap-8 rounded-2xl px-6 sm:px-10 py-10 sm:py-12"
+        style={{ background: "linear-gradient(135deg, var(--color-gradient-from), var(--color-gradient-to))" }}
+      >
         {/* Text Content */}
         <div className="w-full lg:w-1/2 text-center lg:text-left">
-          <h2 className="text-[#03373D] font-bold text-3xl sm:text-4xl lg:text-6xl leading-tight">
+          <h2
+            className="font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight"
+            style={{ color: "var(--color-text-heading)" }}
+          >
             Easy Issue Reporting
           </h2>
-
-          <p className="text-[#355E63] text-sm sm:text-lg lg:text-2xl mt-4 leading-relaxed">
-            Report problems like potholes, garbage, or broken lights in
-            seconds with location & photo.
-            <br className="hidden lg:block" />
-            No paperwork hassle!
+          <p
+            className="text-sm sm:text-lg lg:text-xl mt-4 leading-relaxed max-w-md mx-auto lg:mx-0"
+            style={{ color: "var(--color-text-body)" }}
+          >
+            Report problems like potholes, garbage, or broken lights in seconds
+            with location &amp; photo. No paperwork hassle!
           </p>
         </div>
 

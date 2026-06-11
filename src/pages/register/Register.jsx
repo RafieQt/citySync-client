@@ -27,32 +27,22 @@ const Register = () => {
 
   const handleRegister = async (data) => {
     try {
-      // Upload profile image
       const profileImage = data.photo[0];
-
       const formData = new FormData();
       formData.append("image", profileImage);
 
-      const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${
-        import.meta.env.VITE_image_host
-      }`;
-
+      const imageAPIUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
       const imgRes = await axios.post(imageAPIUrl, formData);
-
       const imgURL = imgRes.data.data.url;
 
-      // Create firebase user
       const result = await registerUser(data.email, data.password);
-
       const firebaseUser = result.user;
 
-      // Update profile
       await updateProfile(firebaseUser, {
         displayName: data.name,
         photoURL: imgURL,
       });
 
-      // Save user in DB
       await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
         email: data.email,
         name: data.name,
@@ -74,11 +64,7 @@ const Register = () => {
       if (error.code === "auth/email-already-in-use") {
         Swal.fire({
           title: "The email is already used!",
-          imageUrl:
-            "https://img.icons8.com/?size=100&id=13826&format=png&color=000000",
-          imageWidth: 100,
-          imageHeight: 100,
-          imageAlt: "Custom image",
+          icon: "warning",
         });
       } else {
         const errorMsg =
@@ -96,137 +82,117 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full px-3 sm:px-6 lg:px-10 py-6 sm:py-10">
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-10 bg-gradient-to-r from-[#E0F7F5] to-[#CDEEEE] rounded-3xl p-5 sm:p-8 lg:p-12 overflow-hidden">
-        
+    <div className="w-full px-4 sm:px-6 lg:px-10 py-8 sm:py-12">
+      <div
+        className="flex flex-col-reverse lg:flex-row items-center justify-between gap-10 rounded-3xl p-6 sm:p-10 lg:p-14 overflow-hidden"
+        style={{ background: "linear-gradient(135deg, var(--color-gradient-from), var(--color-gradient-to))" }}
+      >
         {/* Left Side */}
         <div className="w-full lg:w-1/2">
-          <h2 className="text-[#03373D] font-bold text-3xl sm:text-4xl lg:text-5xl text-center lg:text-left mb-6">
-            Create an Account!
+          <h2
+            className="font-extrabold text-3xl sm:text-4xl lg:text-5xl text-center lg:text-left mb-8"
+            style={{ color: "var(--color-text-heading)" }}
+          >
+            Create an Account
           </h2>
 
-          <div className="bg-base-200 border border-base-300 rounded-2xl w-full max-w-[500px] mx-auto lg:mx-0 p-4 sm:p-6 shadow-sm">
-            <form onSubmit={handleSubmit(handleRegister)}>
-              <fieldset className="space-y-4">
-                
-                {/* Hidden File Input */}
+          <div className="cs-surface w-full max-w-lg mx-auto lg:mx-0 p-6 sm:p-8">
+            <form onSubmit={handleSubmit(handleRegister)} className="space-y-4">
+              {/* Hidden File Input */}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                {...rest}
+                ref={(e) => {
+                  ref(e);
+                  fileRef.current = e;
+                }}
+              />
+
+              {/* Profile Upload */}
+              <div>
+                <label className="label font-medium block mb-1" style={{ color: "var(--color-text-heading)" }}>
+                  Profile Picture
+                </label>
+
+                <div
+                  onClick={() => fileRef.current.click()}
+                  className="w-20 h-20 rounded-full cursor-pointer overflow-hidden border-2 border-dashed flex items-center justify-center hover:scale-105 transition"
+                  style={{ borderColor: "var(--color-primary)", backgroundColor: "var(--color-surface-hover)" }}
+                >
+                  <img
+                    src={profileImg}
+                    alt="upload"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {errors.photo?.type === "required" && (
+                  <p className="text-red-500 text-sm mt-1">Profile Picture is Required!</p>
+                )}
+              </div>
+
+              {/* Name */}
+              <div>
+                <label className="label font-medium block mb-1" style={{ color: "var(--color-text-heading)" }}>Name</label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  {...rest}
-                  ref={(e) => {
-                    ref(e);
-                    fileRef.current = e;
-                  }}
+                  {...register("name", { required: true })}
+                  type="text"
+                  placeholder="Your Name"
+                  className="input input-bordered w-full cs-input"
                 />
+                {errors.name?.type === "required" && (
+                  <p className="text-red-500 text-sm mt-1">Name is Required!</p>
+                )}
+              </div>
 
-                {/* Profile Upload */}
-                <div>
-                  <label className="label font-medium">
-                    Profile Picture
-                  </label>
+              {/* Email */}
+              <div>
+                <label className="label font-medium block mb-1" style={{ color: "var(--color-text-heading)" }}>Email</label>
+                <input
+                  {...register("email", { required: true })}
+                  type="email"
+                  placeholder="Your Email"
+                  className="input input-bordered w-full cs-input"
+                />
+                {errors.email?.type === "required" && (
+                  <p className="text-red-500 text-sm mt-1">Email is Required!</p>
+                )}
+              </div>
 
-                  <div
-                    onClick={() => fileRef.current.click()}
-                    className="w-16 h-16 rounded-full cursor-pointer overflow-hidden border-2 border-dashed border-[#03373D] flex items-center justify-center bg-white hover:scale-105 transition"
-                  >
-                    <img
-                      src={profileImg}
-                      alt="upload"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+              {/* Password */}
+              <div>
+                <label className="label font-medium block mb-1" style={{ color: "var(--color-text-heading)" }}>Password</label>
+                <input
+                  {...register("password", { required: true, minLength: 6 })}
+                  type="password"
+                  placeholder="At least 6 characters"
+                  className="input input-bordered w-full cs-input"
+                />
+                {errors.password?.type === "required" && (
+                  <p className="text-red-500 text-sm mt-1">Password is Required!</p>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <p className="text-red-500 text-sm mt-1">Minimum Length is 6!</p>
+                )}
+              </div>
 
-                  {errors.photo?.type === "required" && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Profile Picture is Required!
-                    </p>
-                  )}
-                </div>
+              {/* Submit */}
+              <button className="cs-btn-primary w-full mt-6 py-3" style={{ fontSize: "1rem" }}>
+                Sign Up
+              </button>
 
-                {/* Name */}
-                <div>
-                  <label className="label font-medium">Name</label>
-
-                  <input
-                    {...register("name", { required: true })}
-                    type="text"
-                    placeholder="Your Name"
-                    className="input input-bordered w-full"
-                  />
-
-                  {errors.name?.type === "required" && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Name is Required!
-                    </p>
-                  )}
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label className="label font-medium">Email</label>
-
-                  <input
-                    {...register("email", { required: true })}
-                    type="email"
-                    placeholder="Your Email"
-                    className="input input-bordered w-full"
-                  />
-
-                  {errors.email?.type === "required" && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Email is Required!
-                    </p>
-                  )}
-                </div>
-
-                {/* Password */}
-                <div>
-                  <label className="label font-medium">Password</label>
-
-                  <input
-                    {...register("password", {
-                      required: true,
-                      minLength: 6,
-                    })}
-                    type="password"
-                    placeholder="At least 6 characters"
-                    className="input input-bordered w-full"
-                  />
-
-                  {errors.password?.type === "required" && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Password is Required!
-                    </p>
-                  )}
-
-                  {errors.password?.type === "minLength" && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Minimum Length is 6!
-                    </p>
-                  )}
-                </div>
-
-                {/* Submit */}
-                <button className="btn w-full bg-[#03373D] hover:bg-[#02292d] border-none text-white font-semibold rounded-xl mt-2">
-                  Sign Up
-                </button>
-
-                {/* Redirect */}
-                <p className="text-center text-sm sm:text-base">
-                  Already a User?{" "}
-                  <Link
-                    to="/signin"
-                    className="text-[#03373D] font-bold hover:underline"
-                  >
-                    Sign In
-                  </Link>
-                </p>
-              </fieldset>
+              {/* Redirect */}
+              <p className="text-center text-sm sm:text-base mt-6" style={{ color: "var(--color-text-body)" }}>
+                Already a User?{" "}
+                <Link to="/signin" className="font-bold hover:underline" style={{ color: "var(--color-primary)" }}>
+                  Sign In
+                </Link>
+              </p>
             </form>
 
-            <div className="mt-4">
+            <div className="mt-6">
               <GoogleLogin />
             </div>
           </div>
@@ -237,7 +203,7 @@ const Register = () => {
           <img
             src={signin}
             alt="register"
-            className="w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[500px] object-contain"
+            className="w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[500px] object-contain drop-shadow-2xl"
           />
         </div>
       </div>

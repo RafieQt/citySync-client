@@ -48,9 +48,9 @@ const MyIssues = () => {
   return (
     <div>
       <div className="flex flex-wrap justify-between items-center mb-6 gap-3">
-        <h1 className="text-2xl font-bold text-[#03373D]">My Issues</h1>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>My Issues</h1>
         <Link to="/submitIssue">
-          <button className="btn px-2 bg-[#03373D] text-white border-none rounded-xl gap-2">
+          <button className="cs-btn-primary gap-2 rounded-xl">
             <PlusCircle size={18} /> Report New Issue
           </button>
         </Link>
@@ -62,7 +62,12 @@ const MyIssues = () => {
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`btn btn-sm px-2 rounded-xl capitalize ${filter === s ? "bg-[#03373D] text-white border-none" : "btn-outline"}`}
+            className={`btn btn-sm px-3 rounded-xl capitalize ${filter === s ? "" : "btn-outline"}`}
+            style={{
+              backgroundColor: filter === s ? "var(--color-primary)" : "transparent",
+              color: filter === s ? "var(--color-bg)" : "var(--color-text-body)",
+              borderColor: filter === s ? "transparent" : "var(--color-border)",
+            }}
           >
             {s}
           </button>
@@ -70,19 +75,19 @@ const MyIssues = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>
+        <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} /></div>
       ) : issues.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
-          <p className="text-gray-400 text-lg mb-3">No issues found.</p>
+        <div className="text-center py-16 cs-surface">
+          <p className="text-lg mb-3" style={{ color: "var(--color-text-muted)" }}>No issues found.</p>
           <Link to="/submitIssue">
-            <button className="btn bg-[#03373D] px-2 text-white border-none rounded-xl">Report an Issue</button>
+            <button className="cs-btn-primary rounded-xl">Report an Issue</button>
           </Link>
         </div>
       ) : (
-        <div className="bg-white px-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div className="cs-surface overflow-x-auto">
           <table className="table">
             <thead>
-              <tr className="text-[#03373D] bg-[#EAF8F7]">
+              <tr style={{ color: "var(--color-text-heading)", backgroundColor: "var(--color-surface-hover)" }}>
                 <th>Issue</th>
                 <th>Category</th>
                 <th>Status</th>
@@ -92,32 +97,33 @@ const MyIssues = () => {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ color: "var(--color-text-body)" }}>
               {issues.map((issue) => (
-                <tr key={issue._id} className="hover">
+                <tr key={issue._id} className="hover" style={{ borderColor: "var(--color-border)" }}>
                   <td>
                     <div className="flex items-center gap-3">
                       <img src={issue.image} className="w-10 h-10 rounded-lg object-cover" alt="" />
                       <p className="font-medium text-sm max-w-[150px] truncate">{issue.title}</p>
                     </div>
                   </td>
-                  <td className="text-xs text-gray-500">{issue.category}</td>
+                  <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{issue.category}</td>
                   <td><span className={`badge badge-sm ${statusColor[issue.status]} capitalize`}>{issue.status}</span></td>
                   <td>
                     <span className={`badge badge-sm capitalize ${issue.priority === "high" ? "badge-error text-white" : "badge-ghost"}`}>
                       {issue.priority}
                     </span>
                   </td>
-                  <td className="text-xs text-gray-400">{new Date(issue.createdAt).toLocaleDateString()}</td>
-                  <td className="text-center font-semibold text-[#03373D]">{issue.upvotes?.length || 0}</td>
+                  <td className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(issue.createdAt).toLocaleDateString()}</td>
+                  <td className="text-center font-semibold" style={{ color: "var(--color-text-heading)" }}>{issue.upvotes?.length || 0}</td>
                   <td>
                     <div className="flex gap-2">
                       <Link to={`/issues/${issue._id}`}>
-                        <button className="btn px-2 btn-xs btn-ghost rounded-lg text-[#03373D]"><Eye size={14} /></button>
+                        <button className="cs-btn-outline" style={{ padding: "2px 8px", fontSize: "0.75rem", borderRadius: "8px" }}><Eye size={14} /></button>
                       </Link>
                       <button
                         onClick={() => handleDelete(issue._id)}
-                        className="btn px-2 btn-xs btn-ghost rounded-lg text-red-500"
+                        className="cs-btn-outline"
+                        style={{ padding: "2px 8px", fontSize: "0.75rem", borderRadius: "8px", borderColor: "#ef4444", color: "#ef4444" }}
                       >
                         <Trash2 size={14} />
                       </button>

@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
       { path: "/all-issues", Component: AllIssues },
       {
         path: "/issues/:id",
-        element: <PrivateRoute><IssueDetails /></PrivateRoute>,
+        element: <IssueDetails />,
       },
       {
         path: "/submitIssue",

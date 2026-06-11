@@ -1,20 +1,20 @@
 import { useParams, useNavigate } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosSecure from "../../utils/axiosSecure";
+import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MapPin, Tag, User, Calendar, ChevronUp, Trash2, Pencil, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 const BOOST_AMOUNT = 1; // Stripe test charge in USD ($1.00); UI shows ৳100
 
-const statusColor = {
-  pending: "badge-warning",
-  "in-progress": "badge-info",
-  resolved: "badge-success",
-  rejected: "badge-error",
+const statusBadgeClass = {
+  resolved: "cs-badge cs-badge--resolved",
+  pending: "cs-badge cs-badge--pending",
+  "in-progress": "cs-badge cs-badge--progress",
+  rejected: "cs-badge cs-badge--rejected",
 };
 
 // ── Edit Modal ───────────────────────────────────────────────────────────────
@@ -63,24 +63,24 @@ const EditModal = ({ issue, onClose }) => {
 
   return (
     <dialog open className="modal modal-open">
-      <div className="modal-box max-w-lg rounded-2xl">
-        <h3 className="font-bold text-xl text-[#03373D] mb-4">Edit Issue</h3>
+      <div className="modal-box max-w-lg cs-surface">
+        <h3 className="font-bold text-xl mb-4" style={{ color: "var(--color-text-heading)" }}>Edit Issue</h3>
         <form onSubmit={handleSubmit(handleEdit)} className="space-y-3">
-          <input {...register("title")} className="input input-bordered w-full rounded-xl" placeholder="Title" />
-          <select {...register("category")} className="select select-bordered w-full rounded-xl">
+          <input {...register("title")} className="input input-bordered w-full cs-input" placeholder="Title" />
+          <select {...register("category")} className="select select-bordered w-full cs-input">
             {["Road Damage","Streetlight","Water Leakage","Garbage Overflow","Footpath Damage","Drainage","Traffic Signal","Other"].map(c => <option key={c}>{c}</option>)}
           </select>
-          <textarea {...register("description")} rows="3" className="textarea textarea-bordered w-full rounded-xl" placeholder="Description" />
-          <input {...register("location")} className="input input-bordered w-full rounded-xl" placeholder="Location" />
+          <textarea {...register("description")} rows="3" className="textarea textarea-bordered w-full cs-input" placeholder="Description" />
+          <input {...register("location")} className="input input-bordered w-full cs-input" placeholder="Location" />
           <div>
-            <label className="label text-sm font-semibold text-gray-600">Update Photo (optional)</label>
-            <input type="file" accept="image/*" {...register("image")} className="file-input file-input-bordered w-full rounded-xl" />
+            <label className="label text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>Update Photo (optional)</label>
+            <input type="file" accept="image/*" {...register("image")} className="file-input file-input-bordered w-full cs-input" />
           </div>
-          <div className="flex gap-2 mt-2">
-            <button type="submit" disabled={uploading || editMutation.isPending} className="btn bg-[#03373D] text-white border-none flex-1 rounded-xl">
+          <div className="flex gap-2 mt-4">
+            <button type="submit" disabled={uploading || editMutation.isPending} className="cs-btn-primary flex-1">
               {uploading || editMutation.isPending ? <span className="loading loading-spinner loading-sm" /> : "Save Changes"}
             </button>
-            <button type="button" onClick={onClose} className="btn px-2 btn-outline flex-1 rounded-xl">Cancel</button>
+            <button type="button" onClick={onClose} className="cs-btn-outline flex-1">Cancel</button>
           </div>
         </form>
       </div>
@@ -102,7 +102,7 @@ const IssueDetails = () => {
   const { data: issue, isLoading } = useQuery({
     queryKey: ["issue", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/issues/${id}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/issues/${id}`);
       return res.data;
     },
   });
@@ -148,36 +148,36 @@ const IssueDetails = () => {
     }
   };
 
-  if (isLoading) return <div className="flex justify-center py-40"><span className="loading loading-spinner loading-lg text-[#03373D]" /></div>;
-  if (!issue) return <div className="text-center py-20 text-gray-400 text-xl">Issue not found.</div>;
+  if (isLoading) return <div className="flex justify-center py-40"><span className="loading loading-spinner loading-lg" style={{ color: "var(--color-primary)" }} /></div>;
+  if (!issue) return <div className="text-center py-20 text-xl" style={{ color: "var(--color-text-muted)" }}>Issue not found.</div>;
 
   const isOwner = user?.email === issue.userEmail;
   const alreadyUpvoted = issue.upvotes?.includes(user?.email);
   const canEdit = isOwner && issue.status === "pending";
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-4xl mx-auto py-8">
       {/* Header */}
-      <div className="bg-white rounded-2xl shadow-md overflow-hidden mb-6">
+      <div className="cs-surface overflow-hidden mb-6">
         <img src={issue.image} alt={issue.title} className="w-full h-64 object-cover" />
-        <div className="p-6">
+        <div className="p-6 sm:p-8">
           <div className="flex flex-wrap gap-2 mb-3">
-            <span className={`badge ${statusColor[issue.status]} capitalize`}>{issue.status}</span>
-            {issue.priority === "high" && <span className="badge badge-error text-white">🔥 Boosted</span>}
+            <span className={statusBadgeClass[issue.status] || "cs-badge"}>{issue.status}</span>
+            {issue.priority === "high" && <span className="cs-badge cs-badge--boosted">🔥 Boosted</span>}
           </div>
-          <h1 className="text-3xl font-extrabold text-[#03373D]">{issue.title}</h1>
+          <h1 className="text-3xl font-extrabold mb-4" style={{ color: "var(--color-text-heading)" }}>{issue.title}</h1>
 
-          <div className="flex flex-wrap gap-4 mt-3 text-gray-500 text-sm">
+          <div className="flex flex-wrap gap-4 text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>
             <span className="flex items-center gap-1"><Tag size={14} />{issue.category}</span>
             <span className="flex items-center gap-1"><MapPin size={14} />{issue.location}</span>
             <span className="flex items-center gap-1"><User size={14} />{issue.userName}</span>
             <span className="flex items-center gap-1"><Calendar size={14} />{new Date(issue.createdAt).toLocaleDateString()}</span>
           </div>
 
-          <p className="mt-4 text-gray-700 leading-relaxed">{issue.description}</p>
+          <p className="leading-relaxed whitespace-pre-wrap" style={{ color: "var(--color-text-body)" }}>{issue.description}</p>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3 mt-6">
+          <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t" style={{ borderColor: "var(--color-border)" }}>
             {/* Upvote */}
             <button
               onClick={() => {
@@ -185,14 +185,14 @@ const IssueDetails = () => {
                 if (isOwner) return toast.error("Can't upvote your own issue");
                 upvoteMutation.mutate();
               }}
-              className={`btn px-2 rounded-xl gap-2 ${alreadyUpvoted ? "bg-[#03373D] text-white border-none" : "btn-outline border-[#03373D] text-[#03373D]"}`}
+              className={alreadyUpvoted ? "cs-btn-primary" : "cs-btn-outline"}
             >
               <ChevronUp size={18} /> {issue.upvotes?.length || 0} Upvotes
             </button>
 
             {/* Edit — owner + pending only */}
             {canEdit && (
-              <button onClick={() => setShowEdit(true)} className="btn px-2 btn-outline rounded-xl gap-2">
+              <button onClick={() => setShowEdit(true)} className="cs-btn-outline">
                 <Pencil size={16} /> Edit
               </button>
             )}
@@ -205,7 +205,8 @@ const IssueDetails = () => {
                     deleteMutation.mutate();
                   }
                 }}
-                className="btn px-2 btn-error btn-outline rounded-xl gap-2"
+                className="cs-btn-outline"
+                style={{ borderColor: "#dc2626", color: "#dc2626" }}
               >
                 <Trash2 size={16} /> Delete
               </button>
@@ -216,7 +217,8 @@ const IssueDetails = () => {
               <button
                 onClick={handleBoostCheckout}
                 disabled={boosting}
-                className="btn px-2 bg-amber-500 hover:bg-amber-600 text-white border-none rounded-xl gap-2"
+                className="cs-btn-primary"
+                style={{ backgroundColor: "#f59e0b", color: "#fff" }}
               >
                 {boosting ? <span className="loading loading-spinner loading-sm" /> : <><Zap size={16} /> Boost Priority (৳100)</>}
               </button>
@@ -227,41 +229,41 @@ const IssueDetails = () => {
 
       {/* Assigned Staff */}
       {issue.assignedStaff && (
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#03373D] mb-3">Assigned Staff</h2>
+        <div className="cs-surface p-6 mb-6">
+          <h2 className="text-xl font-bold mb-4" style={{ color: "var(--color-text-heading)" }}>Assigned Staff</h2>
           <div className="flex items-center gap-3">
             <div className="avatar placeholder">
-              <div className="bg-[#03373D] text-white rounded-full w-10">
+              <div className="rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
                 <span>{issue.assignedStaff.name?.charAt(0)}</span>
               </div>
             </div>
             <div>
-              <p className="font-semibold">{issue.assignedStaff.name}</p>
-              <p className="text-gray-500 text-sm">{issue.assignedStaff.email}</p>
+              <p className="font-semibold" style={{ color: "var(--color-text-heading)" }}>{issue.assignedStaff.name}</p>
+              <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{issue.assignedStaff.email}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* Timeline */}
-      <div className="bg-white rounded-2xl shadow-md p-6">
-        <h2 className="text-xl font-bold text-[#03373D] mb-6">Issue Timeline</h2>
+      <div className="cs-surface p-6">
+        <h2 className="text-xl font-bold mb-6" style={{ color: "var(--color-text-heading)" }}>Issue Timeline</h2>
         <ul className="timeline timeline-vertical">
           {issue.timeline?.map((entry, index) => (
             <li key={index}>
-              {index !== 0 && <hr className="bg-[#03373D]" />}
-              <div className="timeline-start text-sm text-gray-400">
+              {index !== 0 && <hr style={{ backgroundColor: "var(--color-accent)" }} />}
+              <div className="timeline-start text-sm" style={{ color: "var(--color-text-muted)" }}>
                 {new Date(entry.date).toLocaleDateString()}
               </div>
               <div className="timeline-middle">
-                <div className="w-4 h-4 rounded-full bg-[#03373D]" />
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: "var(--color-primary)" }} />
               </div>
-              <div className="timeline-end timeline-box border border-gray-100 shadow-sm">
-                <p className="font-bold text-[#03373D]">{entry.status}</p>
-                <p className="text-sm text-gray-600">{entry.message}</p>
-                <p className="text-xs text-gray-400 mt-1">by {entry.updatedBy} ({entry.role})</p>
+              <div className="timeline-end timeline-box" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+                <p className="font-bold" style={{ color: "var(--color-text-heading)" }}>{entry.status}</p>
+                <p className="text-sm mt-1" style={{ color: "var(--color-text-body)" }}>{entry.message}</p>
+                <p className="text-xs mt-2" style={{ color: "var(--color-text-muted)" }}>by {entry.updatedBy} ({entry.role})</p>
               </div>
-              {index !== issue.timeline.length - 1 && <hr className="bg-[#03373D]" />}
+              {index !== issue.timeline.length - 1 && <hr style={{ backgroundColor: "var(--color-accent)" }} />}
             </li>
           ))}
         </ul>
