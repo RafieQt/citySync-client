@@ -37,12 +37,19 @@ const Footer = () => {
           <Link to="/contactUs" className="link link-hover">Contact</Link>
           <a className="link link-hover">Jobs</a>
         </nav>
-
+        
         <nav>
           <h6 className="footer-title" style={{ color: "var(--color-accent)", opacity: 0.9 }}>Legal</h6>
           <a className="link link-hover">Terms of use</a>
           <a className="link link-hover">Privacy policy</a>
           <a className="link link-hover">Cookie policy</a>
+        </nav>
+
+        <nav>
+          <h6 className="footer-title" style={{ color: "var(--color-accent)", opacity: 0.9 }}>Socials</h6>
+          <Link to="https://www.facebook.com/" className="link link-hover">Facebook</Link>
+          <Link to="https://www.youtube.com/" className="link link-hover">Youtube</Link>
+          <Link to="https://www.instagram.com/" className="link link-hover">Instagram</Link>
         </nav>
       </div>
 
