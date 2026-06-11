@@ -85,6 +85,8 @@ body,
   background-color: var(--color-bg);
   color: var(--color-text-body);
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: visible; /* or just remove any overflow rule on body */
+
 }
 
 /* ═══════════════════════════════════════════

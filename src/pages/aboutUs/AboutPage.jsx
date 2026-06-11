@@ -21,7 +21,7 @@ void main(){
   gl_FragColor=vec4(col,1.0);
 }`;
 
-function ShaderCanvas({ height = "480px" }) {
+function ShaderCanvas() {
   const ref = useRef(null);
   useEffect(() => {
     const canvas = ref.current;
@@ -108,7 +108,7 @@ export default function AboutPage() {
             <span style={{color:"#89D7B7"}}>who built the city.</span>
           </h1>
           <p style={{ fontSize:"clamp(15px,1.8vw,18px)",lineHeight:1.7,color:"rgba(255,244,225,0.65)",maxWidth:520,margin:"0 auto" }}>
-            CivicFix started as a single spreadsheet shared between three neighbourhood organisers. Today it connects thousands of residents with the teams that keep their streets safe and running.
+            CitySync started as a single spreadsheet shared between three neighbourhood organisers. Today it connects thousands of residents with the teams that keep their streets safe and running.
           </p>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default function AboutPage() {
           <FadeIn delay={160}>
             <div style={{ marginTop:48,paddingTop:48,borderTop:"1px solid rgba(255,244,225,0.1)" }}>
               <p style={{ fontSize:16,lineHeight:1.75,color:"rgba(255,244,225,0.6)",maxWidth:640 }}>
-                For too long, reporting a broken bench or flooded drain meant filling out a form that disappeared into a system no one trusted. CivicFix changes that contract. We give residents a direct line to action, and we give administrators the tools to honour it. Every issue logged has a name, a location, an assignee, and a deadline. Nothing is anonymous. Nothing is forgotten.
+                For too long, reporting a broken bench or flooded drain meant filling out a form that disappeared into a system no one trusted. CitySync changes that contract. We give residents a direct line to action, and we give administrators the tools to honour it. Every issue logged has a name, a location, an assignee, and a deadline. Nothing is anonymous. Nothing is forgotten.
               </p>
             </div>
           </FadeIn>

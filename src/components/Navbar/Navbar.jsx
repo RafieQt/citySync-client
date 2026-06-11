@@ -3,7 +3,18 @@ import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
 import face from "../../assets/animation/face.png";
 import toast from "react-hot-toast";
-import { HeartHandshake, Sun, Moon, Menu } from "lucide-react";
+import {
+  HeartHandshake,
+  Sun,
+  Moon,
+  Menu,
+  LayoutDashboard,
+  FileText,
+  CreditCard,
+  LogOut,
+  ShieldCheck,
+  Wrench,
+} from "lucide-react";
 import { useTheme } from "../../Contexts/ThemeContext";
 
 const Navbar = () => {
@@ -17,14 +28,50 @@ const Navbar = () => {
       .catch((error) => toast.error(error.message));
   };
 
+  // Role-based dashboard links shown inside the dropdown
+  const getRoleLinks = () => {
+    const role = dbUser?.role;
+    if (role === "admin") {
+      return (
+        <>
+          <DropdownLink to="/dashboard" icon={<LayoutDashboard size={15} />} label="Dashboard" />
+          <DropdownLink to="/dashboard/manage-users" icon={<ShieldCheck size={15} />} label="Manage Users" />
+          <DropdownLink to="/dashboard/all-issues-admin" icon={<FileText size={15} />} label="All Issues" />
+          <DropdownLink to="/dashboard/payments" icon={<CreditCard size={15} />} label="Payments" />
+        </>
+      );
+    }
+    if (role === "staff") {
+      return (
+        <>
+          <DropdownLink to="/dashboard" icon={<LayoutDashboard size={15} />} label="Dashboard" />
+          <DropdownLink to="/dashboard/assigned-issues" icon={<Wrench size={15} />} label="Assigned Issues" />
+        </>
+      );
+    }
+    // citizen (default)
+    return (
+      <>
+        <DropdownLink to="/dashboard" icon={<LayoutDashboard size={15} />} label="Dashboard" />
+        <DropdownLink to="/dashboard/my-issues" icon={<FileText size={15} />} label="My Issues" />
+        {!dbUser?.isPremium && (
+          <DropdownLink
+            to="/dashboard/subscription"
+            icon={<CreditCard size={15} />}
+            label="Upgrade to Premium"
+            badge="Free"
+          />
+        )}
+      </>
+    );
+  };
+
   const navLinks = (
     <>
       <li>
         <NavLink
           to="/all-issues"
-          className={({ isActive }) =>
-            `cs-nav-link${isActive ? " active" : ""}`
-          }
+          className={({ isActive }) => `cs-nav-link${isActive ? " active" : ""}`}
         >
           All Issues
         </NavLink>
@@ -32,9 +79,7 @@ const Navbar = () => {
       <li>
         <NavLink
           to="/submitIssue"
-          className={({ isActive }) =>
-            `cs-nav-link${isActive ? " active" : ""}`
-          }
+          className={({ isActive }) => `cs-nav-link${isActive ? " active" : ""}`}
         >
           Report Issue
         </NavLink>
@@ -42,9 +87,7 @@ const Navbar = () => {
       <li>
         <NavLink
           to="/aboutUs"
-          className={({ isActive }) =>
-            `cs-nav-link${isActive ? " active" : ""}`
-          }
+          className={({ isActive }) => `cs-nav-link${isActive ? " active" : ""}`}
         >
           About Us
         </NavLink>
@@ -52,9 +95,7 @@ const Navbar = () => {
       <li>
         <NavLink
           to="/contactUs"
-          className={({ isActive }) =>
-            `cs-nav-link${isActive ? " active" : ""}`
-          }
+          className={({ isActive }) => `cs-nav-link${isActive ? " active" : ""}`}
         >
           Contact Us
         </NavLink>
@@ -111,60 +152,122 @@ const Navbar = () => {
             {/* Auth Section */}
             {user ? (
               <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div
-                    className="w-9 rounded-full"
-                    style={{ ring: "2px solid var(--color-accent)" }}
-                  >
+                {/* Avatar trigger */}
+                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                  <div className="w-9 rounded-full">
                     <img
                       alt={user.displayName}
                       src={user.photoURL || face}
                       onError={(e) => { e.target.src = face; }}
-                      className="rounded-full w-9 h-9 object-cover ring-2"
-                      style={{ ringColor: "var(--color-accent)" }}
+                      className="rounded-full w-9 h-9 object-cover"
                     />
                   </div>
                 </div>
-                <ul
+
+                {/* Dropdown panel */}
+                <div
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content rounded-xl z-50 mt-2 w-56 p-2 shadow-lg"
+                  className="dropdown-content rounded-2xl z-50 mt-2 w-64 overflow-hidden shadow-lg"
                   style={{
                     backgroundColor: "var(--color-surface)",
                     border: "1px solid var(--color-border)",
-                    color: "var(--color-text-body)",
                   }}
                 >
-                  <li className="px-3 py-2">
-                    <span className="font-semibold" style={{ color: "var(--color-text-heading)" }}>
-                      {user.displayName || "User"}
-                    </span>
-                    {dbUser?.isPremium && (
-                      <span className="cs-badge cs-badge--boosted ml-1">Premium</span>
-                    )}
-                  </li>
-                  <div style={{ height: 1, backgroundColor: "var(--color-border)", margin: "4px 0" }} />
-                  <li>
-                    <Link
-                      to="/dashboard"
-                      className="cs-nav-link block w-full"
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
+                  {/* ── Profile header ── */}
+                  <div
+                    className="p-4"
+                    style={{ borderBottom: "1px solid var(--color-border)" }}
+                  >
+                    {/* Avatar + name + email */}
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={user.photoURL || face}
+                        onError={(e) => { e.target.src = face; }}
+                        className="w-11 h-11 rounded-full object-cover flex-shrink-0"
+                        alt={user.displayName}
+                      />
+                      <div className="overflow-hidden">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span
+                            className="font-semibold text-sm truncate"
+                            style={{ color: "var(--color-text-heading)" }}
+                          >
+                            {user.displayName || "User"}
+                          </span>
+                          {dbUser?.isPremium && (
+                            <span className="cs-badge cs-badge--boosted text-xs">
+                              Premium
+                            </span>
+                          )}
+                        </div>
+                        <p
+                          className="text-xs truncate mt-0.5"
+                          style={{ color: "var(--color-text-muted)" }}
+                        >
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Mini stat tiles */}
+                    <div className="grid grid-cols-2 gap-2 mt-3">
+                      <div
+                        className="rounded-xl p-2.5"
+                        style={{ backgroundColor: "var(--color-surface-hover)" }}
+                      >
+                        <p
+                          className="text-xs mb-0.5"
+                          style={{ color: "var(--color-text-muted)" }}
+                        >
+                          Role
+                        </p>
+                        <p
+                          className="text-sm font-semibold capitalize"
+                          style={{ color: "var(--color-text-heading)" }}
+                        >
+                          {dbUser?.role || "—"}
+                        </p>
+                      </div>
+                      <div
+                        className="rounded-xl p-2.5"
+                        style={{ backgroundColor: "var(--color-surface-hover)" }}
+                      >
+                        <p
+                          className="text-xs mb-0.5"
+                          style={{ color: "var(--color-text-muted)" }}
+                        >
+                          Issues
+                        </p>
+                        <p
+                          className="text-sm font-semibold"
+                          style={{ color: "var(--color-text-heading)" }}
+                        >
+                          {dbUser?.issueCount ?? "—"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ── Role-based nav links ── */}
+                  <div className="p-1.5">
+                    {getRoleLinks()}
+                  </div>
+
+                  {/* ── Logout ── */}
+                  <div
+                    className="p-1.5"
+                    style={{ borderTop: "1px solid var(--color-border)" }}
+                  >
                     <button
                       onClick={handleLogout}
-                      className="cs-nav-link w-full text-left"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm w-full text-left transition-colors hover:bg-red-50"
                       style={{ color: "#dc2626" }}
                     >
+                      <LogOut size={15} />
                       Logout
                     </button>
-                  </li>
-                </ul>
+                  </div>
+                </div>
               </div>
             ) : (
               <Link to="/signin">
@@ -204,5 +307,31 @@ const Navbar = () => {
     </div>
   );
 };
+
+// ── Helper component for dropdown nav links ──
+const DropdownLink = ({ to, icon, label, badge }) => (
+  <Link
+    to={to}
+    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm cs-nav-link"
+    style={{ display: "flex", alignItems: "center" }}
+  >
+    <span style={{ color: "var(--color-text-muted)", display: "flex" }}>
+      {icon}
+    </span>
+    {label}
+    {badge && (
+      <span
+        className="ml-auto text-xs px-2 py-0.5 rounded-full font-medium"
+        style={{
+          backgroundColor: "var(--color-primary)",
+          color: "var(--color-bg)",
+          opacity: 0.85,
+        }}
+      >
+        {badge}
+      </span>
+    )}
+  </Link>
+);
 
 export default Navbar;
